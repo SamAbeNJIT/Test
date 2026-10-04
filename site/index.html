@@ -9,16 +9,16 @@
   --accent:#FFC72C; --accent-ink:#14213D; --brand:#1F4FD8; --ok:#1B8754; --ok-bg:#E6F4EC; --warn:#A45A00; --warn-bg:#FFF3DD;
   --sign-face:#FFFFFF; --glass:#CFE0EE; --metal:#B9C1CC; --stake:#7C8696;
   --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --r:10px;
+  --r:10px; --blue:#0B63E5; --on-blue:#FFFFFF;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0E1320; --surface:#161D2E; --ink:#E8ECF4; --muted:#9BA5B9; --line:#2A3347;
   --accent:#FFC72C; --accent-ink:#14213D; --brand:#86A8FF; --ok:#4CC38A; --ok-bg:#12301F; --warn:#FFB54A; --warn-bg:#33260F;
-  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; color-scheme:dark}}
+  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; --blue:#2F6FEB; --on-blue:#FFFFFF; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0E1320; --surface:#161D2E; --ink:#E8ECF4; --muted:#9BA5B9; --line:#2A3347;
   --accent:#FFC72C; --accent-ink:#14213D; --brand:#86A8FF; --ok:#4CC38A; --ok-bg:#12301F; --warn:#FFB54A; --warn-bg:#33260F;
-  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; color-scheme:dark}
+  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; --blue:#2F6FEB; --on-blue:#FFFFFF; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);margin:0}
@@ -206,7 +206,8 @@ input.t.bad{border-color:#D23B3B}
 .sign .face{background:var(--sign-face);box-shadow:0 10px 24px rgba(10,20,40,.18);display:grid;place-items:center;overflow:hidden;position:relative;max-width:100%}
 .sign .face img{width:100%;height:100%;object-fit:contain;display:block}
 .sign.yard .face{border-radius:3px;border:1px solid rgba(0,0,0,.08)}
-.sign.yard::after{content:"";width:62%;height:36px;border:4px solid var(--stake);border-top:0;border-bottom:0;margin-top:-2px}
+.sign.yard{padding-bottom:var(--leg,24px)}
+.sign.yard::after{content:"";position:absolute;bottom:0;left:19%;right:19%;height:var(--leg,24px);border:3px solid var(--stake);border-top:0;border-bottom:0}
 .sign.banner .face{border-radius:2px}
 .sign.banner .face::before,.sign.banner .face::after{content:"";position:absolute;top:6px;width:9px;height:9px;border-radius:50%;background:var(--metal);box-shadow:0 0 0 2px #fff inset}
 .sign.banner .face::before{left:6px}.sign.banner .face::after{right:6px}
@@ -214,10 +215,10 @@ input.t.bad{border-color:#D23B3B}
 .sign.acrylic .face{border-radius:6px;border:6px solid rgba(160,200,230,.55);box-shadow:0 14px 30px rgba(10,20,40,.22), inset 0 0 0 1px rgba(255,255,255,.6)}
 .sign.acrylic .face::before,.sign.acrylic .face::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(#fff,var(--metal));top:8px}
 .sign.acrylic .face::before{left:8px}.sign.acrylic .face::after{right:8px}
-.sign.aframe{padding:0 14px}
+.sign.aframe{padding-bottom:calc(var(--leg,24px)*.7)}
 .sign.aframe .face{border:8px solid #2B2F36;border-radius:4px}
-.sign.aframe::after{content:"";width:calc(100% + 0px);height:22px;border-left:8px solid #2B2F36;border-right:8px solid #2B2F36;margin-top:-2px}
-.sign.decal{background:var(--glass);padding:22px;border-radius:6px;border:8px solid var(--metal)}
+.sign.aframe::after{content:"";position:absolute;bottom:0;left:4%;right:4%;height:calc(var(--leg,24px)*.7);border-left:6px solid #2B2F36;border-right:6px solid #2B2F36}
+.sign.decal{background:var(--glass);padding:12px;border-radius:6px;border:5px solid var(--metal)}
 .sign.decal .face{background:transparent;box-shadow:none}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:10px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
 
@@ -226,6 +227,66 @@ footer.foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:
 .view{animation:in .25s ease}
 @keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.view{animation:none}.pcard,.btn{transition:none}}
+/* v2: patterns verified from Sticker Mule screenshots */
+.btn-blue{background:var(--blue);color:var(--on-blue)}
+.btn-blue:hover{filter:brightness(1.08)}
+.btn-lg{padding:18px 22px;font-size:1.15rem}
+.btn-sm{padding:9px 14px;font-size:.9rem}
+.cats{background:var(--surface);border-block:1px solid var(--line);padding-block:20px}
+.cats .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+@media (max-width:820px){.cats .wrap{grid-template-columns:repeat(3,1fr)}}
+.cat{background:none;border:0;cursor:pointer;display:grid;gap:8px;justify-items:center;font-weight:600;padding:8px;border-radius:10px;color:var(--ink)}
+.cat:hover{background:var(--bg)}
+.cat-art{height:100px;width:100%;display:grid;place-items:center}
+.sort{border:0;background:transparent;font-weight:700;color:var(--ink)}
+.pdp-main{display:grid;gap:18px;min-width:0}
+.title-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.title-row .rv{font-weight:700;text-decoration:none}
+.lede-sm{max-width:60ch}
+.stage{position:static}
+.cfgcard{position:sticky;top:84px;background:var(--surface);border:3px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:20px;min-width:0}
+@media (max-width:860px){.cfgcard{position:static}}
+.cfgcard fieldset{border:0;padding:0;margin:0;display:grid;gap:2px}
+.lg{display:flex;justify-content:space-between;align-items:baseline;width:100%;font:800 1.2rem/1.2 var(--display);font-stretch:90%;margin-bottom:8px}
+.lg .link{font:700 .95rem var(--body);text-decoration:none}
+.rad{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:6px 2px;cursor:pointer;border-radius:6px}
+.rad:hover{background:var(--bg)}
+.rad input{accent-color:var(--blue);width:18px;height:18px;margin:0}
+.qrow{grid-template-columns:auto 1fr auto 82px}
+.qrow .price{text-align:right}
+.save-t{color:var(--ok);font-size:.9rem;text-align:right}
+.custom-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;padding:6px 0}
+.cfg-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.cfg-total strong{font:850 2.2rem/1 var(--display);font-stretch:85%}
+.next-hint{text-align:center;color:var(--muted);font-size:.95rem;margin-top:-8px}
+.narrow{max-width:760px;display:grid;gap:18px;padding-bottom:48px}
+.up-head{text-align:center;display:grid;gap:8px}
+.drop{background:var(--bg);padding:48px 20px}
+.alt-opt{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;font-weight:700;color:var(--brand);cursor:pointer}
+.alt-opt:hover{border-color:var(--brand)}
+.skip{text-align:center;font-size:1.1rem}
+.skip .link{text-decoration:none}
+.up-preview{background:var(--bg);border-radius:12px;padding:20px;display:grid;place-items:center}
+.cart{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
+@media (max-width:860px){.cart{grid-template-columns:1fr}}
+.ctable{display:grid;min-width:0}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) 96px 90px 32px;gap:14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line)}
+.chead{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding-block:8px;border-bottom:2px solid var(--line)}
+.cdesc{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center}
+.cdesc .mini{background:var(--bg);border-radius:8px;height:72px;display:grid;place-items:center;padding:6px;box-shadow:0 2px 6px rgba(10,20,40,.12)}
+.cdesc .link{text-decoration:none;justify-self:start}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qty-in{width:96px}
+.rm{width:28px;height:28px;border-radius:50%;border:0;background:var(--line);color:var(--ink);font-weight:800;cursor:pointer}
+@media (max-width:560px){.crow{grid-template-columns:minmax(0,1fr) 80px;}.crow .qty-in{width:80px}.chead{display:none}}
+.csum{display:grid;gap:14px;justify-items:center}
+.csum-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:10px;text-align:center;width:100%}
+.csum .link{text-decoration:none}
+.xsell{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(160px,1fr);gap:14px;overflow-x:auto;padding-bottom:8px}
+.xs{background:none;border:0;cursor:pointer;display:grid;gap:8px;text-align:left;font-weight:600;color:var(--ink)}
+.xs .thumb{background:var(--surface);border:1px solid var(--line);border-radius:10px;height:120px;display:grid;place-items:center;padding:10px}
+.promo-pop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(340px,calc(100% - 32px));background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(10,20,40,.22);padding:20px;display:grid;gap:10px;z-index:40}
+.promo-pop .x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:1.4rem;cursor:pointer;color:var(--muted)}
 </style>
 
 <div class="promo">Free shipping on every order<span>•</span>Free online proofs<span>•</span>Printed in 4 days</div>
@@ -233,10 +294,10 @@ footer.foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:
   <div class="wrap">
     <button class="logo" data-go="home" aria-label="Postline Signs home"><i>P</i>Postline</button>
     <nav class="main" aria-label="Main">
-      <button data-go="home" data-scroll="products" class="hide-sm">Products</button>
+      <button data-go="home" data-scroll="products" class="hide-sm">All signs</button>
       <button data-go="product" data-p="yard" data-qty="1" class="hide-sm">Try 1 sign</button>
       <button data-go="home" data-scroll="reviews" class="hide-sm">Reviews</button>
-      <button class="cartbtn" data-go="checkout" aria-label="Cart">Cart <b id="cartCount">0</b></button>
+      <button class="cartbtn" data-go="cart" aria-label="Cart">Cart <b id="cartCount">0</b></button>
     </nav>
   </div>
 </header>
@@ -247,35 +308,38 @@ footer.foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:
 <script>
 (function(){
 /* ---------- data ---------- */
-const QTY=[1,5,10,25,50,100];
-const DISC={1:1,5:.82,10:.7,25:.58,50:.5,100:.42};
+const QTY=[1,5,10,25,50,100,250];
+const TIERS=[[1,1],[5,.82],[10,.7],[25,.58],[50,.5],[100,.42],[250,.36]];
 const PRODUCTS={
-  yard:{name:"Yard signs",kind:"yard",blurb:"Corrugated plastic signs with optional H-stakes. Built for elections, open houses and job sites.",
+  yard:{name:"Yard signs",kind:"yard",blurb:"Corrugated plastic signs with optional H-stakes. Built for elections, open houses and job sites. Weatherproof and readable from across the street.",
     material:"4mm corrugated plastic",print:"Full color, 1 or 2 sided",use:"Outdoor, 1–2 years",
     sizes:[["18 × 12 in",18,12,14],["24 × 18 in",24,18,19],["36 × 24 in",36,24,29]],addon:{label:"Add H-stakes",price:2}},
-  banners:{name:"Vinyl banners",kind:"banner",blurb:"13 oz scrim vinyl with hemmed edges and grommets every 2 ft. Hangs anywhere.",
+  banners:{name:"Vinyl banners",kind:"banner",blurb:"13 oz scrim vinyl with hemmed edges and grommets every 2 ft. Hang it on a fence, a storefront or a stage.",
     material:"13 oz scrim vinyl",print:"Full color, UV-resistant ink",use:"Outdoor, 3+ years",
     sizes:[["4 × 2 ft",48,24,39],["6 × 3 ft",72,36,69],["8 × 4 ft",96,48,109]]},
-  aluminum:{name:"Aluminum signs",kind:"aluminum",blurb:"Rust-proof .040 aluminum with rounded corners and pre-drilled holes. Parking, safety and storefront.",
+  aluminum:{name:"Aluminum signs",kind:"aluminum",blurb:"Rust-proof .040 aluminum with rounded corners and pre-drilled holes. Made for parking, safety and storefront signs.",
     material:".040 aluminum",print:"Full color, laminated",use:"Outdoor, 7+ years",
     sizes:[["18 × 12 in",18,12,29],["24 × 18 in",24,18,45],["36 × 24 in",36,24,79]]},
   acrylic:{name:"Acrylic signs",kind:"acrylic",blurb:"Clear 1/4 in acrylic with brushed standoffs. Lobby and office signs that look expensive.",
     material:'1/4" clear acrylic',print:"Reverse-printed, white backer",use:"Indoor",
     sizes:[["12 × 12 in",12,12,59],["24 × 18 in",24,18,99],["36 × 24 in",36,24,169]]},
-  aframe:{name:"A-frame signs",kind:"aframe",blurb:"Folding sidewalk sign with two printed inserts. Swap the inserts any time.",
+  aframe:{name:"A-frame signs",kind:"aframe",blurb:"Folding sidewalk sign with two printed inserts. Swap the inserts whenever your specials change.",
     material:"Steel frame + coroplast inserts",print:"Full color, both sides",use:"Outdoor, daily use",
     sizes:[["24 × 36 in",24,36,149]]},
-  decals:{name:"Window decals",kind:"decal",blurb:"Removable vinyl for glass. Hours, logos and sale signage with no residue.",
+  decals:{name:"Window decals",kind:"decal",blurb:"Removable vinyl for glass. Store hours, logos and sale signs that peel off with no residue.",
     material:"Removable white vinyl",print:"Full color, die cut",use:"Indoor or outdoor glass",
     sizes:[["6 × 6 in",6,6,6],["12 × 12 in",12,12,12],["24 × 24 in",24,24,28]]}
 };
 const ORDER=["yard","banners","aluminum","acrylic","aframe","decals"];
+const REVIEWS={yard:3384,banners:4317,aluminum:2951,acrylic:1288,aframe:906,decals:2410};
 const SAMPLE_ART="data:image/svg+xml;utf8,"+encodeURIComponent(
  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><rect width="300" height="200" fill="#1F4FD8"/><rect x="10" y="10" width="280" height="180" fill="none" stroke="#FFC72C" stroke-width="4"/><text x="150" y="92" text-anchor="middle" font-family="Arial Narrow,Arial" font-weight="900" font-size="46" textLength="250" lengthAdjust="spacingAndGlyphs" fill="#fff">OPEN HOUSE</text><text x="150" y="132" text-anchor="middle" font-family="Arial" font-weight="700" font-size="20" fill="#FFC72C">SATURDAY 1–4 PM</text><text x="150" y="166" text-anchor="middle" font-family="Arial" font-size="15" fill="#fff">412 Maple Ave · Call 555-0142</text></svg>`);
 
 /* ---------- state ---------- */
-const S={view:"home",pid:"yard",size:1,qty:10,addon:false,art:null,artName:"",notes:"",cart:[],order:null,proof:{status:"ready",version:1,history:[],confirming:false,changing:false}};
+const S={view:"home",pid:"yard",size:1,cw:30,ch:20,qty:10,qtyCustom:false,addon:false,art:null,artName:"",notes:"",brief:"",designOpen:false,sizeHelp:false,editIx:null,
+  cart:[],discount:0,promo:"open",order:null,proof:{status:"ready",version:1,history:[],confirming:false,changing:false}};
 try{const saved=JSON.parse(localStorage.getItem("postline-cart")||"[]");if(Array.isArray(saved))S.cart=saved.filter(i=>PRODUCTS[i.pid])}catch(e){}
+try{if(localStorage.getItem("postline-promo"))S.promo="closed"}catch(e){}
 function saveCart(){try{localStorage.setItem("postline-cart",JSON.stringify(S.cart.map(i=>({...i,art:i.art&&i.art.length<400000?i.art:null}))))}catch(e){}}
 
 /* ---------- helpers ---------- */
@@ -283,20 +347,29 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const money2=n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 const money=n=>money2(n).replace(/\.00$/,"");
-function unit(pid,size,qty){return PRODUCTS[pid].sizes[size][3]*DISC[qty]}
-function lineTotal(i){return (unit(i.pid,i.size,i.qty)+(i.addon?PRODUCTS[i.pid].addon.price:0))*i.qty}
-function bizDays(n){const d=new Date();let k=0;while(k<n){d.setDate(d.getDate()+1);const w=d.getDay();if(w&&w<6)k++}return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
-function fromPrice(pid){const p=PRODUCTS[pid];return p.sizes[0][3]*DISC[100]}
-function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
-
-function mock(pid,size,art,maxW=300,maxH=260){
-  const p=PRODUCTS[pid],[,w,h]=p.sizes[size];const r=Math.min(maxW/w,maxH/h);
-  const W=Math.round(w*r);
-  return `<div class="sign ${p.kind}"><div class="face" style="width:min(${W}px,100%);aspect-ratio:${w}/${h}"><img alt="Your artwork on a ${esc(p.sizes[size][0])} ${esc(p.name.toLowerCase())}" src="${art||SAMPLE_ART}"></div></div>`;
+const disc=q=>TIERS.filter(t=>q>=t[0]).pop()[1];
+function sizeOf(o){
+  const p=PRODUCTS[o.pid];
+  if(o.size!==-1)return p.sizes[o.size];
+  const ref=p.sizes[Math.min(1,p.sizes.length-1)];
+  return [`${o.cw} × ${o.ch} in (custom)`,o.cw,o.ch,Math.max(5,ref[3]*(o.cw*o.ch)/(ref[1]*ref[2]))];
 }
-function stepper(cur){
-  const steps=["Choose options","Upload artwork","Checkout","Approve proof"];
-  return `<ol class="stepper" aria-label="Order progress">${steps.map((s,i)=>`<li class="${i<cur?"done":i===cur?"cur":""}" ${i===cur?'aria-current="step"':""}><span class="n">${i<cur?"✓":i+1}</span>${s}</li>`).join("")}</ol>`;
+const unit=o=>sizeOf(o)[3]*disc(o.qty);
+const lineTotal=o=>(unit(o)+(o.addon?PRODUCTS[o.pid].addon.price:0))*o.qty;
+const subtotal=()=>S.cart.reduce((a,i)=>a+lineTotal(i),0);
+const discountFor=sub=>S.discount&&sub>=30?S.discount:0;
+function bizDays(n){const d=new Date();let k=0;while(k<n){d.setDate(d.getDate()+1);const w=d.getDay();if(w&&w<6)k++}return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
+const cur=()=>({pid:S.pid,size:S.size,cw:S.cw,ch:S.ch,qty:S.qty,addon:S.addon});
+
+function mock(o,art,maxW=300,maxH=260){
+  const p=PRODUCTS[o.pid],[label,w,h]=sizeOf(o);const r=Math.min(maxW/w,maxH/h);
+  const pad=p.kind==="decal"?34:0;
+  return `<div class="sign ${p.kind}" style="--leg:${Math.max(6,Math.round(h*r*.18))}px;width:min(${Math.round(w*r)+pad}px,100%)"><div class="face" style="width:100%;aspect-ratio:${w}/${h}"><img alt="Artwork on a ${esc(label)} ${esc(p.name.toLowerCase())}" src="${art||SAMPLE_ART}"></div></div>`;
+}
+function stepper(c){
+  const steps=["Choose options","Upload artwork","Cart & checkout","Approve proof"];
+  return `<ol class="stepper" aria-label="Order progress">${steps.map((s,i)=>`<li class="${i<c?"done":i===c?"cur":""}" ${i===c?'aria-current="step"':""}><span class="n">${i<c?"✓":i+1}</span>${s}</li>`).join("")}</ol>`;
 }
 
 /* ---------- views ---------- */
@@ -306,20 +379,23 @@ V.home=()=>`
   <div class="hero-copy">
     <span class="eyebrow">Custom signs for small businesses</span>
     <h1>Custom signs, printed and shipped in 4 days.</h1>
-    <p class="lede">Pick a size, upload your design, and approve a free proof before we print. Shipping is always free.</p>
-    <div class="hero-cta"><button class="btn btn-primary" data-go="home" data-scroll="products">Shop signs</button><button class="btn btn-ghost" data-go="product" data-p="yard" data-qty="1">Order 1 sign to try it</button></div>
-    <div><span class="stars" aria-hidden="true">★★★★★</span> <b>4.9</b> <span class="muted">from 12,480 reviews · 97% would order again</span></div>
-    <div class="trust"><span>Free proof in 4 hours</span><span>Unlimited changes</span><span>Pay nothing until you approve</span></div>
+    <p class="lede">Free shipping. Free online proofs. Pay only after you approve.</p>
+    <div class="hero-cta"><button class="btn btn-blue" data-go="home" data-scroll="products">Shop signs</button><button class="btn btn-ghost" data-go="product" data-p="yard" data-qty="1">Try 1 sign</button></div>
+    <div class="small"><span class="stars" aria-hidden="true">★★★★★</span> <b>4.9</b> from <u>12,480 reviews</u> · Trusted by <u>3,200 local businesses</u></div>
   </div>
-  <div style="display:grid;place-items:center">${mock("yard",1,null,340,300)}</div>
+  <div style="display:grid;place-items:center">${mock({pid:"yard",size:1},null,340,300)}</div>
+</div></section>
+
+<section class="cats"><div class="wrap">
+  ${ORDER.map(pid=>`<button class="cat" data-go="product" data-p="${pid}"><span class="cat-art">${mock({pid,size:Math.min(1,PRODUCTS[pid].sizes.length-1)},null,92,56)}</span>${PRODUCTS[pid].name}</button>`).join("")}
 </div></section>
 
 <section class="block" id="products"><div class="wrap">
-  <div class="sec-head"><h2>What are you making?</h2><span class="muted small">Every product ships free. Prices drop as quantity goes up.</span></div>
-  <div class="grid-products">${ORDER.map(pid=>{const p=PRODUCTS[pid];return `
+  <div class="sec-head"><h2>All signs</h2><label class="small muted" for="sort">Sort by <select id="sort" class="sort"><option>Most popular</option><option>Price: low to high</option></select></label></div>
+  <div class="grid-products">${(S.sort==="price"?[...ORDER].sort((a,b)=>PRODUCTS[a].sizes[0][3]-PRODUCTS[b].sizes[0][3]):ORDER).map(pid=>{const p=PRODUCTS[pid];return `
     <button class="pcard" data-go="product" data-p="${pid}">
-      <div class="thumb">${mock(pid,Math.min(1,p.sizes.length-1),null,190,130)}</div>
-      <div class="row"><h3>${p.name}</h3><span class="from num">from ${money2(fromPrice(pid))}</span></div>
+      <div class="thumb">${mock({pid,size:Math.min(1,p.sizes.length-1)},null,190,130)}</div>
+      <h3>${p.name}</h3>
       <span class="muted small">${p.material} · ${p.use}</span>
     </button>`}).join("")}</div>
 </div></section>
@@ -328,7 +404,7 @@ V.home=()=>`
   <div class="sec-head"><h2>How ordering works</h2></div>
   <div class="steps">
     <div class="step"><h3>Pick size and quantity</h3><p class="muted">Live prices for every option. No quote forms.</p></div>
-    <div class="step"><h3>Upload your design</h3><p class="muted">Any file type. No design? Skip it and email us later.</p></div>
+    <div class="step"><h3>Upload your design</h3><p class="muted">Any file type. No design? We'll make one, or email it later.</p></div>
     <div class="step"><h3>Approve your free proof</h3><p class="muted">Ready in about 4 hours. Ask for unlimited changes.</p></div>
     <div class="step"><h3>We print and ship free</h3><p class="muted">Printed in 4 days. Your card is charged only after approval.</p></div>
   </div>
@@ -345,36 +421,31 @@ V.home=()=>`
 
 <section class="block"><div class="wrap">
   <div class="band"><div style="display:grid;gap:8px"><h2>Happy or we reprint it.</h2><p class="muted">If a sign arrives damaged or wrong, we reprint or refund it. No return shipping.</p></div><button class="btn btn-primary" data-go="home" data-scroll="products">Start an order</button></div>
-</div></section>`;
+</div></section>
+${S.promo==="open"?`
+<aside class="promo-pop" aria-label="First order discount">
+  <button class="x" data-act="closepromo" aria-label="Close">×</button>
+  <b>$10 off your first order</b>
+  <span class="small muted">Valid on one order of $30 or more.</span>
+  <input class="t" id="promoEmail" type="email" placeholder="Email address" autocomplete="email">
+  <span class="err" id="promoErr" hidden>Enter an email to get the code.</span>
+  <button class="btn btn-blue btn-block" data-act="claim">Claim</button>
+</aside>`:""}`;
 
 V.product=()=>{
-  const p=PRODUCTS[S.pid];const addon=p.addon;
-  const u=unit(S.pid,S.size,S.qty)+(S.addon&&addon?addon.price:0);const total=u*S.qty;
+  const p=PRODUCTS[S.pid],addon=p.addon,o=cur(),[label]=sizeOf(o);
+  const u=unit(o)+(S.addon&&addon?addon.price:0);
   return `
 <div class="wrap">
-  <div class="crumbs"><button data-go="home" data-scroll="products">Signs</button> / ${p.name}</div>
+  <div class="crumbs"><button data-go="home" data-scroll="products">All signs</button> / ${p.name}</div>
   <div class="pdp">
-    <div class="stage">
-      <div class="stage-canvas" id="stage">${mock(S.pid,S.size,S.art,380,320)}</div>
-      <div class="stage-cap"><span>Preview at ${esc(p.sizes[S.size][0])}. Sample artwork shown until you upload.</span><span>${p.material}</span></div>
-    </div>
-    <div class="config">
-      <div style="display:grid;gap:10px">
-        <h1>${p.name}</h1>
-        <div class="small"><span class="stars">★★★★★</span> <b>4.9</b> <span class="muted">(${(2140+S.pid.length*311).toLocaleString()} reviews)</span></div>
-        <p class="muted">${p.blurb}</p>
-      </div>
-      <fieldset><legend>Select a size</legend>
-        ${p.sizes.map((s,i)=>`<label class="opt"><input type="radio" name="size" id="size-${i}" value="${i}" ${i===S.size?"checked":""}><span>${s[0]}</span><span></span><span class="muted small num">from ${money2(s[3]*DISC[100])}/ea</span></label>`).join("")}
-      </fieldset>
-      <fieldset><legend><span>Select a quantity</span><span class="muted small" style="font-weight:500">Price includes free shipping</span></legend>
-        ${QTY.map(q=>{const each=unit(S.pid,S.size,q);const save=Math.round((1-DISC[q])*100);return `<label class="opt"><input type="radio" name="qty" id="qty-${q}" value="${q}" ${q===S.qty?"checked":""}><span class="num">${q}</span><span class="save ${save?"":"none"}">Save ${save}%</span><span class="price num">${money(each*q)}<br><span class="muted small" style="font-weight:500">${money2(each)}/ea</span></span></label>`}).join("")}
-      </fieldset>
-      ${addon?`<label class="opt" style="grid-template-columns:auto 1fr auto"><input type="checkbox" id="addon" ${S.addon?"checked":""}><span>${addon.label}</span><span class="muted small">+${money(addon.price)}/sign</span></label>`:""}
-      <div class="summary">
-        <div class="total"><span><b class="num">${S.qty}</b> × ${esc(p.sizes[S.size][0])}<br><span class="muted small num">${money2(u)} each</span></span><strong class="num">${money2(total)}</strong></div>
-        <button class="btn btn-primary btn-block" data-act="continue">Continue</button>
-        <div class="ship-line"><span class="dot"></span>Free shipping. Arrives by ${bizDays(6)} if you approve your proof today.</div>
+    <div class="pdp-main">
+      <div class="title-row"><h1>${p.name}</h1><span class="stars" aria-hidden="true">★★★★★</span><a href="#reviews" data-go="home" data-scroll="reviews" class="rv">${REVIEWS[S.pid].toLocaleString()} reviews</a></div>
+      <p class="muted lede-sm">${p.blurb}</p>
+      <div><button class="btn btn-ghost btn-sm" data-act="sample">Order 1 sample sign</button></div>
+      <div class="stage">
+        <div class="stage-canvas" id="stage">${mock(o,S.art,420,320)}</div>
+        <div class="stage-cap"><span>Preview at <span id="slabel">${esc(label)}</span>. Sample artwork until you upload yours.</span><span>${p.material}</span></div>
       </div>
       <dl class="facts">
         <div><dt>Material</dt><dd>${p.material}</dd></div><div><dt>Print</dt><dd>${p.print}</dd></div>
@@ -387,42 +458,94 @@ V.product=()=>{
         <details class="faq"><summary>Can I change my order after checkout?</summary><p>Yes. Request size, quantity or design changes from your proof page as many times as you need.</p></details>
       </div>
     </div>
+    <div class="cfgcard">
+      <fieldset><legend class="lg"><span>Select a size</span><button class="link" data-act="sizehelp" aria-expanded="${S.sizeHelp}">Size help</button></legend>
+        ${S.sizeHelp?`<div class="callout small">Rule of thumb: every 1 in of letter height reads from about 10 ft away. Most yard signs are 24 × 18 in.</div>`:""}
+        ${p.sizes.map((s,i)=>`<label class="rad"><input type="radio" name="size" id="size-${i}" value="${i}" ${i===S.size?"checked":""}><span>${s[0]}</span></label>`).join("")}
+        <label class="rad"><input type="radio" name="size" id="size--1" value="-1" ${S.size===-1?"checked":""}><span>Custom size</span></label>
+        ${S.size===-1?`<div class="custom-row"><label class="f" for="cw">Width (in)<input class="t" id="cw" type="number" min="4" max="120" value="${S.cw}"></label><span>×</span><label class="f" for="ch">Height (in)<input class="t" id="ch" type="number" min="4" max="120" value="${S.ch}"></label></div>`:""}
+      </fieldset>
+      <fieldset><legend class="lg"><span>Select a quantity</span></legend>
+        ${QTY.map(q=>{const t=disc(q),save=Math.round((1-t)*100);return `<label class="rad qrow"><input type="radio" name="qty" id="qty-${q}" value="${q}" ${!S.qtyCustom&&q===S.qty?"checked":""}><span class="num">${q.toLocaleString()}</span><span class="num price" id="qp-${q}">${money(lineTotal({...o,qty:q,addon:false}))}</span><span class="save-t">${save?`Save ${save}%`:""}</span></label>`}).join("")}
+        <label class="rad"><input type="radio" name="qty" id="qty-custom" value="custom" ${S.qtyCustom?"checked":""}><span>Custom quantity</span></label>
+        ${S.qtyCustom?`<label class="f" for="cqty">How many signs?<input class="t" id="cqty" type="number" min="1" max="10000" value="${S.qty}"></label>`:""}
+      </fieldset>
+      ${addon?`<label class="rad"><input type="checkbox" id="addon" ${S.addon?"checked":""}><span>${addon.label} <span class="muted small">+${money(addon.price)}/sign</span></span></label>`:""}
+      <div class="cfg-total"><strong class="num" id="ptotal">${money(u*S.qty)}</strong><span class="num muted" id="punit">${money2(u)} / sign</span></div>
+      <button class="btn btn-primary btn-block btn-lg" data-act="continue">${S.editIx!=null?"Update item":"Continue"}</button>
+      <p class="next-hint">Next: upload artwork →</p>
+      <div class="ship-line"><span class="dot"></span>Free shipping. Arrives by ${bizDays(6)} if you approve your proof today.</div>
+    </div>
   </div>
 </div>`;};
 
 V.upload=()=>{
-  const p=PRODUCTS[S.pid];
+  const p=PRODUCTS[S.pid],o=cur();
+  return `
+<div class="wrap narrow">
+  ${stepper(1)}
+  <div class="up-head"><h1>Upload your artwork</h1><p class="muted">Free artwork setup. Online proof. Pay only after you approve.</p></div>
+  ${S.artName?`
+  <div class="panel">
+    <div class="up-preview">${mock(o,S.art,320,240)}</div>
+    <div class="filechip">${S.art?`<img src="${S.art}" alt="">`:""}<span class="name">${esc(S.artName)}</span><label class="link" for="file">Change file</label><input id="file" type="file" accept="image/*,.pdf,.ai,.eps,.svg" hidden></div>
+    ${S.art?`<div class="callout ok">Looks good. Our designers check every file before your proof.</div>`:`<div class="callout">We can't preview this file type here, but we'll use it for your proof.</div>`}
+    <label class="f" for="notes">Notes for our designers <span class="muted" style="font-weight:400">(optional)</span><textarea class="t" id="notes" rows="2" placeholder="Example: make the phone number bigger">${esc(S.notes)}</textarea></label>
+    <div class="cfg-total small"><span><b>${S.qty.toLocaleString()} × ${esc(sizeOf(o)[0])}</b> ${p.name.toLowerCase()}</span><b class="num">${money2(lineTotal(o))}</b></div>
+    <button class="btn btn-primary btn-block btn-lg" data-act="addcart">${S.editIx!=null?"Update cart":"Add to cart"}</button>
+  </div>`:`
+  <label class="drop" id="drop" for="file">
+    <span class="btn btn-blue">Choose file…</span>
+    <span class="muted small">or drag and drop</span>
+    <input id="file" type="file" accept="image/*,.pdf,.ai,.eps,.svg" hidden>
+  </label>
+  ${S.designOpen?`
+  <div class="panel">
+    <label class="f" for="brief">Describe your sign and a designer will make it for free
+      <textarea class="t" id="brief" rows="3" placeholder="Example: Open House, Saturday 1–4pm, 412 Maple Ave, our logo in the corner">${esc(S.brief)}</textarea></label>
+    <span class="err" id="briefErr" hidden>Tell us what the sign should say.</span>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="senddesign">Add to cart with design request</button><button class="btn btn-ghost" data-act="toggledesign">Cancel</button></div>
+  </div>`:`<button class="alt-opt" data-act="toggledesign">✎ No design? Describe it and we'll design it free</button>`}
+  <p class="skip">or, <button class="link" data-act="skip">skip this step &amp; email artwork later.</button></p>`}
+  <p class="small muted" style="text-align:center"><button class="link" data-go="product" data-p="${S.pid}">← Back to options</button></p>
+</div>`;};
+
+V.cart=()=>{
+  if(!S.cart.length) return `<div class="wrap" style="padding-block:60px;display:grid;gap:14px;justify-items:start"><h1>Your cart is empty</h1><p class="muted">Pick a sign to get a live price in seconds.</p><button class="btn btn-blue" data-go="home" data-scroll="products">Browse signs</button></div>`;
+  const sub=subtotal(),d=discountFor(sub);
+  const inCart=new Set(S.cart.map(i=>i.pid));
   return `
 <div class="wrap">
-  ${stepper(1)}
-  <div class="two">
-    <div class="panel">
-      <div style="display:grid;gap:6px"><h2>Upload your artwork</h2><p class="muted">PDF, AI, PNG, JPG or SVG. Any size, any quality. We'll fix it on your proof.</p></div>
-      <label class="drop" id="drop" for="file">
-        <span class="big">Drag a file here, or click to choose</span>
-        <span class="muted small">Max 50 MB. Your file stays in this browser for the demo.</span>
-        <input id="file" type="file" accept="image/*,.pdf,.ai,.eps,.svg" hidden>
-      </label>
-      ${S.artName?`<div class="filechip">${S.art?`<img src="${S.art}" alt="">`:""}<span class="name">${esc(S.artName)}</span><button class="link" data-act="clearfile">Remove</button></div>
-        ${S.art?`<div class="callout ok">Looks good. Our designers check every file before your proof.</div>`:`<div class="callout">We can't preview this file type here, but we'll use it for your proof.</div>`}`:""}
-      <label class="f" for="notes">Notes for our designers <span class="muted" style="font-weight:400">(optional)</span><textarea class="t" id="notes" rows="3" placeholder="Example: make the phone number bigger, use our blue #1F4FD8">${esc(S.notes)}</textarea></label>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <button class="btn btn-primary" data-act="addcart">${S.artName?"Add to cart":"Add to cart without artwork"}</button>
-        <button class="link" data-go="product" data-p="${S.pid}">Back to options</button>
+  ${stepper(2)}
+  <h1 style="margin-block:8px 18px">Cart</h1>
+  <div class="cart">
+    <div class="ctable" role="table" aria-label="Cart items">
+      <div class="crow chead" role="row"><span role="columnheader">Description</span><span role="columnheader">Quantity</span><span role="columnheader">Total</span><span></span></div>
+      ${S.cart.map((i,ix)=>{const p=PRODUCTS[i.pid];return `
+      <div class="crow" role="row">
+        <div class="cdesc"><span class="mini">${mock(i,i.art,60,60)}</span><div style="min-width:0;display:grid;gap:2px"><button class="link" data-go="product" data-p="${i.pid}">${p.name}</button><span class="small">${esc(sizeOf(i)[0])}${i.addon?" · H-stakes":""} <button class="link" data-act="edit" data-ix="${ix}">Edit</button></span><span class="small muted trunc">${i.artName?esc(i.artName):"Artwork: email after checkout"}</span></div></div>
+        <input class="t qty-in num" type="number" min="1" max="10000" id="cq-${ix}" data-ix="${ix}" value="${i.qty}" aria-label="Quantity for ${p.name}">
+        <b class="num" id="ct-${ix}">${money(lineTotal(i))}</b>
+        <button class="rm" data-act="remove" data-ix="${ix}" aria-label="Remove ${p.name}">×</button>
+      </div>`}).join("")}
+    </div>
+    <aside class="csum">
+      <div class="csum-box">
+        <b class="num" style="font-size:1.5rem" id="csub">Subtotal: ${money(sub-d)}</b>
+        <span class="muted">${d?`$10 first-order discount applied · `:""}Free shipping</span>
+        <button class="btn btn-primary btn-block btn-lg" data-go="checkout">Checkout 🔒</button>
       </div>
-      ${S.artName?"":`<p class="small muted">No design yet? Add to cart now and email your file after checkout. We'll hold your spot.</p>`}
-    </div>
-    <div class="panel" style="justify-items:center">
-      <span class="eyebrow" style="justify-self:start">Live preview</span>
-      ${mock(S.pid,S.size,S.art,300,260)}
-      <div style="justify-self:stretch;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap" class="small"><span><b>${S.qty} × ${esc(p.sizes[S.size][0])}</b> ${p.name.toLowerCase()}</span><span class="num"><b>${money2(lineTotal({pid:S.pid,size:S.size,qty:S.qty,addon:S.addon}))}</b></span></div>
-    </div>
+      <button class="link" data-act="share">Share your cart</button>
+    </aside>
   </div>
+  <section class="block"><div class="sec-head"><h2>Add more to your order</h2></div>
+    <div class="xsell">${ORDER.filter(p=>!inCart.has(p)).map(pid=>`<button class="xs" data-go="product" data-p="${pid}"><span class="thumb">${mock({pid,size:Math.min(1,PRODUCTS[pid].sizes.length-1)},null,140,90)}</span>${PRODUCTS[pid].name}</button>`).join("")}</div>
+  </section>
 </div>`;};
 
 V.checkout=()=>{
-  if(!S.cart.length) return `<div class="wrap" style="padding-block:60px;display:grid;gap:14px;justify-items:start"><h1>Your cart is empty</h1><p class="muted">Pick a sign to get a live price in seconds.</p><button class="btn btn-primary" data-go="home" data-scroll="products">Browse signs</button></div>`;
-  const sub=S.cart.reduce((a,i)=>a+lineTotal(i),0);
+  if(!S.cart.length){S.view="cart";return V.cart()}
+  const sub=subtotal(),d=discountFor(sub),tot=sub-d;
   return `
 <div class="wrap">
   ${stepper(2)}
@@ -432,7 +555,7 @@ V.checkout=()=>{
         <h2>Checkout</h2>
         <div class="express"><button type="button" data-act="express">Pay with Apple Pay</button><button type="button" data-act="express">Pay with PayPal</button></div>
         <div class="or">or enter details</div>
-        <label class="f" for="email">Email <span class="muted" style="font-weight:400">— your proof link is sent here</span><input class="t" id="email" type="email" autocomplete="email" required></label>
+        <label class="f" for="email">Email <span class="muted" style="font-weight:400">(we send your proof link here)</span><input class="t" id="email" type="email" autocomplete="email" required></label>
         <label class="f" for="phone">Mobile <span class="muted" style="font-weight:400">(optional, for a text when your proof is ready)</span><input class="t" id="phone" type="tel" autocomplete="tel"></label>
       </div>
       <div class="panel">
@@ -446,20 +569,19 @@ V.checkout=()=>{
         <div class="callout ok">You won't be charged until you approve your proof.</div>
         <label class="f" for="card">Card number<input class="t" id="card" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" required></label>
         <div class="grid2"><label class="f" for="exp">Expiry<input class="t" id="exp" autocomplete="cc-exp" placeholder="MM / YY" required></label><label class="f" for="cvc">CVC<input class="t" id="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" required></label></div>
-        <button class="btn btn-primary btn-block" type="submit">Place order · ${money2(sub)}</button>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Place order · ${money2(tot)}</button>
         <p class="small muted">Demo only: no real payment is taken. <button type="button" class="link" data-act="fill">Fill with example details</button></p>
       </div>
     </form>
     <aside class="side panel">
-      <h3>Order summary</h3>
-      <div>${S.cart.map((i,ix)=>{const p=PRODUCTS[i.pid];return `
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Order summary</h3><button class="link small" data-go="cart">Edit cart</button></div>
+      <div>${S.cart.map(i=>`
         <div class="line-item">
-          <div class="mini">${mock(i.pid,i.size,i.art,60,60)}</div>
-          <div style="display:grid;gap:4px;min-width:0"><b>${p.name}</b><span class="small muted">${esc(p.sizes[i.size][0])} · Qty ${i.qty}${i.addon?" · H-stakes":""}</span><span class="small muted" style="overflow-wrap:anywhere">${i.artName?esc(i.artName):"Artwork: email after checkout"}</span>
-            <div class="acts"><button class="link" data-act="edit" data-ix="${ix}">Edit</button><button class="link" data-act="remove" data-ix="${ix}">Remove</button></div></div>
+          <div class="mini">${mock(i,i.art,60,60)}</div>
+          <div style="display:grid;gap:4px;min-width:0"><b>${PRODUCTS[i.pid].name}</b><span class="small muted">${esc(sizeOf(i)[0])} · Qty ${i.qty.toLocaleString()}${i.addon?" · H-stakes":""}</span><span class="small muted trunc">${i.artName?esc(i.artName):"Artwork: email after checkout"}</span></div>
           <b class="num">${money2(lineTotal(i))}</b>
-        </div>`}).join("")}</div>
-      <div class="totals num"><div><span>Subtotal</span><span>${money2(sub)}</span></div><div><span>Shipping</span><span class="free">Free</span></div><div><span>Proof &amp; revisions</span><span class="free">Free</span></div><div class="grand"><span>Total</span><span>${money2(sub)}</span></div></div>
+        </div>`).join("")}</div>
+      <div class="totals num"><div><span>Subtotal</span><span>${money2(sub)}</span></div>${d?`<div><span>First-order discount</span><span class="free">−${money2(d)}</span></div>`:""}<div><span>Shipping</span><span class="free">Free</span></div><div><span>Proof &amp; revisions</span><span class="free">Free</span></div><div class="grand"><span>Total</span><span>${money2(tot)}</span></div></div>
       <div class="ship-line"><span class="dot"></span>Arrives by ${bizDays(6)} with same-day proof approval</div>
     </aside>
   </div>
@@ -482,14 +604,15 @@ V.confirm=()=>{
         <li><span class="b">5</span><div><b>Delivered by ${o.eta}</b><p class="small muted">If you approve today.</p></div></li>
       </ol>
       <button class="btn btn-primary" data-act="openproof" style="justify-self:start">Your proof is ready · Review it</button>
-      <p class="small muted">Demo shortcut: in real life this button arrives by email a few hours later.</p>
+      <p class="small muted">Demo shortcut: in real life this link arrives by email a few hours later.</p>
     </div>
-    <div class="panel"><h3>What you ordered</h3>${o.items.map(i=>`<div class="line-item" style="grid-template-columns:72px 1fr auto"><div class="mini">${mock(i.pid,i.size,i.art,60,60)}</div><div><b>${PRODUCTS[i.pid].name}</b><br><span class="small muted">${esc(PRODUCTS[i.pid].sizes[i.size][0])} · Qty ${i.qty}</span></div><b class="num">${money2(lineTotal(i))}</b></div>`).join("")}</div>
+    <div class="panel"><h3>What you ordered</h3>${o.items.map(i=>`<div class="line-item"><div class="mini">${mock(i,i.art,60,60)}</div><div><b>${PRODUCTS[i.pid].name}</b><br><span class="small muted">${esc(sizeOf(i)[0])} · Qty ${i.qty.toLocaleString()}</span></div><b class="num">${money2(lineTotal(i))}</b></div>`).join("")}
+      ${o.discount?`<div class="totals num"><div><span>First-order discount</span><span class="free">−${money2(o.discount)}</span></div></div>`:""}</div>
   </div>
 </div>`;};
 
 V.proof=()=>{
-  const o=S.order,i=o.items[0],p=PRODUCTS[i.pid],P=S.proof,[label,w,h]=p.sizes[i.size];
+  const o=S.order,i=o.items[0],p=PRODUCTS[i.pid],P=S.proof,[label,w,h]=sizeOf(i);
   const approved=P.status==="approved",revising=P.status==="revising";
   return `
 <div class="wrap">
@@ -497,13 +620,14 @@ V.proof=()=>{
   <div class="two">
     <div class="proofsheet">
       <div class="proof-head"><div><span class="eyebrow">Order #${o.id} · Proof v${P.version}</span><h2>${p.name}, ${esc(label)}</h2></div><span class="pill ${approved?"ok":""}">${approved?"Approved":revising?"Revision in progress":"Waiting on you"}</span></div>
-      <div class="stage-canvas"><div class="dim"><span class="v">${h} in</span>${mock(i.pid,i.size,i.art,340,280)}<span class="h">${w} in</span></div></div>
+      <div class="stage-canvas"><div class="dim"><span class="v">${h} in</span>${mock(i,i.art,340,280)}<span class="h">${w} in</span></div></div>
       <ul class="checks">
         <li>Printed size ${esc(label)}, ${p.material}</li>
         <li>Bleed added: 0.125 in on all sides</li>
         <li>Resolution checked: prints sharp at this size</li>
-        <li>Quantity ${i.qty}${i.addon?", H-stakes included":""}</li>
+        <li>Quantity ${i.qty.toLocaleString()}${i.addon?", H-stakes included":""}</li>
       </ul>
+      ${o.items.length>1?`<p class="small muted">Proofs for the other ${o.items.length-1} item(s) in this order arrive separately.</p>`:""}
     </div>
     <div class="panel">
       ${approved?`
@@ -526,7 +650,7 @@ V.proof=()=>{
           <span class="err" id="changeErr" hidden>Describe the change so our designer knows what to do.</span>
           <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="sendchange">Send change request</button><button class="btn btn-ghost" data-act="cancelchange">Cancel</button></div>`
         :`
-          <button class="btn btn-primary btn-block" data-act="confirmapprove">Approve proof</button>
+          <button class="btn btn-primary btn-block btn-lg" data-act="confirmapprove">Approve proof</button>
           <button class="btn btn-ghost btn-block" data-act="requestchange">Request changes</button>
           <p class="small muted">Changes are free and unlimited. Cancel for free any time before you approve.</p>`}`}
       ${P.history.length?`<div class="history"><span class="eyebrow">History</span>${P.history.map(h=>`<div>${esc(h)}</div>`).join("")}</div>`:""}
@@ -535,60 +659,86 @@ V.proof=()=>{
 </div>`;};
 
 /* ---------- render + routing ---------- */
-function stay(){const y=window.scrollY;render();window.scrollTo(0,y)}
+function stay(focusId){const y=window.scrollY;render();window.scrollTo(0,y);if(focusId){const el=document.getElementById(focusId);if(el)el.focus({preventScroll:true})}}
 function render(scrollTo){
   $("#app").innerHTML=`<div class="view">${V[S.view]()}</div>`;
   $("#cartCount").textContent=S.cart.length;
   if(scrollTo){const el=document.getElementById(scrollTo);if(el){el.scrollIntoView({behavior:"smooth"});return}}
   window.scrollTo(0,0);
 }
+function resetItem(pid){Object.assign(S,{pid,size:Math.min(1,PRODUCTS[pid].sizes.length-1),addon:false,art:null,artName:"",notes:"",brief:"",designOpen:false,sizeHelp:false,editIx:null})}
 function go(view,opts={}){
-  if(view==="product"&&opts.p&&opts.p!==S.pid){S.pid=opts.p;S.size=Math.min(1,PRODUCTS[S.pid].sizes.length-1);S.addon=false;S.art=null;S.artName="";S.notes="";S.editIx=null}
-  if(opts.qty)S.qty=+opts.qty;
+  if(view==="product"&&opts.p&&(opts.p!==S.pid||S.editIx!=null))resetItem(opts.p);
+  if(opts.qty){S.qty=+opts.qty;S.qtyCustom=false}
   if((view==="proof"||view==="confirm")&&!S.order)view="home";
   S.view=view;render(opts.scroll);
+}
+function addToCart(extra={}){
+  const n=$("#notes");if(n)S.notes=n.value;
+  const item={...cur(),art:S.art,artName:S.artName,notes:S.notes,...extra};
+  if(S.editIx!=null&&S.cart[S.editIx]){S.cart[S.editIx]=item;S.editIx=null;toast("Cart updated")}else{S.cart.push(item);toast("Added to cart")}
+  saveCart();S.view="cart";render();
 }
 
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");
   if(g){e.preventDefault();go(g.dataset.go,{p:g.dataset.p,scroll:g.dataset.scroll,qty:g.dataset.qty});return}
   const a=e.target.closest("[data-act]");if(!a)return;
-  const act=a.dataset.act;
-  if(act==="continue"){go("upload")}
-  else if(act==="clearfile"){e.preventDefault();S.art=null;S.artName="";stay()}
-  else if(act==="addcart"){
-    const n=$("#notes");if(n)S.notes=n.value;
-    const item={pid:S.pid,size:S.size,qty:S.qty,addon:S.addon,art:S.art,artName:S.artName,notes:S.notes};
-    if(S.editIx!=null&&S.cart[S.editIx]){S.cart[S.editIx]=item;S.editIx=null}else S.cart.push(item);
-    saveCart();go("checkout");toast("Added to cart");
+  const act=a.dataset.act,ix=+a.dataset.ix;
+  switch(act){
+  case "continue": go("upload");break;
+  case "sample": S.qty=1;S.qtyCustom=false;stay("qty-1");toast("Quantity set to 1 so you can test the quality");break;
+  case "sizehelp": S.sizeHelp=!S.sizeHelp;stay();break;
+  case "toggledesign": S.designOpen=!S.designOpen;stay(S.designOpen?"brief":null);break;
+  case "senddesign": {const t=$("#brief").value.trim();if(!t){$("#briefErr").hidden=false;$("#brief").focus();return}S.brief=t;S.art=null;S.artName="Design request: "+(t.length>40?t.slice(0,40)+"…":t);addToCart({notes:t});break}
+  case "skip": S.art=null;S.artName="";addToCart();break;
+  case "addcart": addToCart();break;
+  case "remove": S.cart.splice(ix,1);saveCart();stay();toast("Removed from cart");break;
+  case "edit": {const i=S.cart[ix];Object.assign(S,{pid:i.pid,size:i.size,cw:i.cw??S.cw,ch:i.ch??S.ch,qty:i.qty,qtyCustom:!QTY.includes(i.qty),addon:i.addon,art:i.art,artName:i.artName,notes:i.notes||"",editIx:ix});S.view="product";render();break}
+  case "share": {const txt="My Postline cart:\n"+S.cart.map(i=>`${i.qty} × ${PRODUCTS[i.pid].name}, ${sizeOf(i)[0]}: ${money2(lineTotal(i))}`).join("\n");
+    try{navigator.clipboard.writeText(txt).then(()=>toast("Cart summary copied"),()=>toast("Copy blocked by your browser"))}catch(err){toast("Copy blocked by your browser")}break}
+  case "closepromo": S.promo="closed";try{localStorage.setItem("postline-promo","1")}catch(err){}stay();break;
+  case "claim": {const v=$("#promoEmail").value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){$("#promoErr").hidden=false;$("#promoEmail").focus();return}S.discount=10;S.promo="closed";try{localStorage.setItem("postline-promo","1")}catch(err){}stay();toast("$10 off applied to orders of $30+");break}
+  case "express": toast("Demo: express pay would open here. Use the card form below.");break;
+  case "fill": {const v={email:"sam@mapleteam.example",phone:"555-0142",name:"Sam Rivera",addr:"412 Maple Ave",city:"Columbus",state:"OH",zip:"43215",card:"4242 4242 4242 4242",exp:"12 / 28",cvc:"123"};for(const k in v){const el=document.getElementById(k);if(el){el.value=v[k];el.classList.remove("bad")}}document.querySelectorAll(".co .err").forEach(x=>x.remove());break}
+  case "openproof": S.proof={status:"ready",version:1,history:["v1 sent by Jordan (prepress): added bleed, centered artwork."],confirming:false,changing:false};go("proof");break;
+  case "confirmapprove": S.proof.confirming=true;stay();break;
+  case "cancelconfirm": S.proof.confirming=false;stay();break;
+  case "approve": S.proof.status="approved";S.proof.confirming=false;S.proof.history.push(`You approved v${S.proof.version}. Production started.`);stay();toast("Proof approved");break;
+  case "requestchange": S.proof.changing=true;stay("change");break;
+  case "cancelchange": S.proof.changing=false;stay();break;
+  case "sendchange": {const t=$("#change").value.trim();if(!t){$("#changeErr").hidden=false;$("#change").focus();return}S.proof.history.push(`You asked: "${t}"`);S.proof.status="revising";S.proof.changing=false;stay();toast("Change request sent");break}
+  case "newversion": S.proof.version++;S.proof.status="ready";S.proof.history.push(`v${S.proof.version} sent by Jordan (prepress): change applied.`);stay();break;
   }
-  else if(act==="remove"){S.cart.splice(+a.dataset.ix,1);saveCart();render();toast("Removed from cart")}
-  else if(act==="edit"){const i=S.cart[+a.dataset.ix];Object.assign(S,{pid:i.pid,size:i.size,qty:i.qty,addon:i.addon,art:i.art,artName:i.artName,notes:i.notes||"",editIx:+a.dataset.ix});S.view="product";render()}
-  else if(act==="express"){toast("Demo: express pay would open here. Use the card form below.")}
-  else if(act==="fill"){const v={email:"sam@mapleteam.example",phone:"555-0142",name:"Sam Rivera",addr:"412 Maple Ave",city:"Columbus",state:"OH",zip:"43215",card:"4242 4242 4242 4242",exp:"12 / 28",cvc:"123"};for(const k in v){const el=document.getElementById(k);if(el){el.value=v[k];el.classList.remove("bad")}}document.querySelectorAll(".co .err").forEach(x=>x.remove())}
-  else if(act==="openproof"){S.proof={status:"ready",version:1,history:["v1 sent by Jordan (prepress): added bleed, centered artwork."],confirming:false,changing:false};go("proof")}
-  else if(act==="confirmapprove"){S.proof.confirming=true;stay()}
-  else if(act==="cancelconfirm"){S.proof.confirming=false;stay()}
-  else if(act==="approve"){S.proof.status="approved";S.proof.confirming=false;S.proof.history.push(`You approved v${S.proof.version}. Production started.`);render();toast("Proof approved")}
-  else if(act==="requestchange"){S.proof.changing=true;render();$("#change").focus()}
-  else if(act==="cancelchange"){S.proof.changing=false;stay()}
-  else if(act==="sendchange"){const t=$("#change").value.trim();if(!t){$("#changeErr").hidden=false;$("#change").focus();return}S.proof.history.push(`You asked: "${t}"`);S.proof.status="revising";S.proof.changing=false;render();toast("Change request sent")}
-  else if(act==="newversion"){S.proof.version++;S.proof.status="ready";S.proof.history.push(`v${S.proof.version} sent by Jordan (prepress): change applied.`);render()}
 });
 
+const clampInt=(v,lo,hi,d)=>{v=parseInt(v,10);return isNaN(v)?d:Math.min(hi,Math.max(lo,v))};
+function liveTotal(){const p=PRODUCTS[S.pid],o=cur(),u=unit(o)+(S.addon&&p.addon?p.addon.price:0);$("#ptotal").textContent=money(u*S.qty);$("#punit").textContent=money2(u)+" / sign";
+  QTY.forEach(q=>{const el=document.getElementById("qp-"+q);if(el)el.textContent=money(lineTotal({...o,qty:q,addon:false}))});
+  $("#stage").innerHTML=mock(o,S.art,420,320);$("#slabel").textContent=sizeOf(o)[0]}
 document.addEventListener("change",e=>{
   const t=e.target;
-  if(t.name==="size"){S.size=+t.value;stay();document.getElementById("size-"+S.size).focus({preventScroll:true})}
-  else if(t.name==="qty"){S.qty=+t.value;stay();document.getElementById("qty-"+S.qty).focus({preventScroll:true})}
-  else if(t.id==="addon"){S.addon=t.checked;stay();$("#addon").focus({preventScroll:true})}
+  if(t.name==="size"){S.size=+t.value;stay("size-"+S.size)}
+  else if(t.name==="qty"){if(t.value==="custom"){S.qtyCustom=true;stay("cqty")}else{S.qtyCustom=false;S.qty=+t.value;stay("qty-"+S.qty)}}
+  else if(t.id==="addon"){S.addon=t.checked;stay("addon")}
+  else if(t.id==="cw"||t.id==="ch"){S[t.id]=clampInt(t.value,4,120,S[t.id]);t.value=S[t.id];liveTotal()}
+  else if(t.id==="cqty"){S.qty=clampInt(t.value,1,10000,S.qty);t.value=S.qty;liveTotal()}
+  else if(t.classList.contains("qty-in")){const ix=+t.dataset.ix,i=S.cart[ix];i.qty=clampInt(t.value,1,10000,i.qty);t.value=i.qty;saveCart();const sub=subtotal();$("#ct-"+ix).textContent=money(lineTotal(i));$("#csub").textContent="Subtotal: "+money(sub-discountFor(sub))}
+  else if(t.id==="sort"){S.sort=t.value.startsWith("Price")?"price":"";stay("sort")}
   else if(t.id==="file"&&t.files[0])readFile(t.files[0]);
 });
-document.addEventListener("input",e=>{if(e.target.id==="notes")S.notes=e.target.value});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="notes")S.notes=t.value;
+  else if(t.id==="brief")S.brief=t.value;
+  else if(t.id==="cqty"){const v=parseInt(t.value,10);if(v>=1&&v<=10000){S.qty=v;liveTotal()}}
+  else if(t.id==="cw"||t.id==="ch"){const v=parseInt(t.value,10);if(v>=4&&v<=120){S[t.id]=v;liveTotal()}}
+});
 
 function readFile(f){
   const n=$("#notes");if(n)S.notes=n.value;
   S.artName=f.name;S.art=null;
-  if(/^image\//.test(f.type)&&f.size<15e6){const r=new FileReader();r.onload=()=>{S.art=r.result;stay()};r.readAsDataURL(f)}else render();
+  if(/^image\//.test(f.type)&&f.size<15e6){const r=new FileReader();r.onload=()=>{S.art=r.result;stay()};r.readAsDataURL(f)}else stay();
 }
 document.addEventListener("dragover",e=>{const d=e.target.closest&&e.target.closest("#drop");if(d){e.preventDefault();d.classList.add("over")}});
 document.addEventListener("dragleave",e=>{const d=e.target.closest&&e.target.closest("#drop");if(d)d.classList.remove("over")});
@@ -604,8 +754,9 @@ document.addEventListener("submit",e=>{
     el.classList.toggle("bad",!ok);
     if(!ok){const s=document.createElement("span");s.className="err";s.textContent=msgs[id];el.after(s);first=first||el}}
   if(first){first.focus();return}
-  const total=S.cart.reduce((a,i)=>a+lineTotal(i),0);
-  S.order={id:"PL-"+(48000+Math.floor(Math.random()*999)),first:$("#name").value.trim().split(" ")[0],email:$("#email").value.trim(),phone:$("#phone").value.trim(),items:S.cart.slice(),total,eta:bizDays(6)};
+  const sub=subtotal(),d=discountFor(sub);
+  S.order={id:"PL-"+(48000+Math.floor(Math.random()*999)),first:$("#name").value.trim().split(" ")[0],email:$("#email").value.trim(),phone:$("#phone").value.trim(),items:S.cart.slice(),discount:d,total:sub-d,eta:bizDays(6)};
+  if(d)S.discount=0;
   S.cart=[];saveCart();go("confirm");
 });
 

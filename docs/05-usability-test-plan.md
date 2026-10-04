@@ -11,7 +11,7 @@
 | 2 | "Is ordering 50 a better deal per sign than 25? By how much?" | Reads per-unit price / Save % | Success, errors |
 | 3 | "Upload this logo and add the signs to your cart." | Item in cart with file | Success, hesitation points |
 | 4 | "You don't have your design yet. Order anyway." | Uses skip path | Success, confusion |
-| 5 | "Check out." | Reaches confirmation | Time, form errors |
+| 5 | "Actually you need 40, not 25. Fix it, then check out." | Edits qty in cart, reaches confirmation | Time, form errors |
 | 6 | "When will you be charged? When will the signs arrive?" | Correct answers | Comprehension |
 | 7 | "The phone number is too small. Fix that, then approve." | Requests change, then approves through confirm | Success |
 

@@ -4,7 +4,7 @@ A sign-company ordering flow modeled on **Sticker Mule**, built for a UX class.
 
 ## Prototype
 Open [`site/index.html`](site/index.html) in a browser. It's one self-contained file. Full flow:
-**Home → Product (size/qty/live price) → Upload → Checkout → Confirmation → Proof (request changes / approve)**.
+**Home → Product (size/qty/live price) → Upload → Cart → Checkout → Confirmation → Proof (request changes / approve)**.
 Use "Fill with example details" at checkout. No real payments are taken.
 
 ## Docs
