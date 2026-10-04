@@ -13,3 +13,4 @@ Use "Fill with example details" at checkout. No real payments are taken.
 3. [Personas & journey map](03-personas-journey.md)
 4. [Heuristics & design rationale](04-heuristics.md)
 5. [Usability test plan](05-usability-test-plan.md)
+6. [Custom shapes: the margin driver](06-custom-shapes.md)
