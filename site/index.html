@@ -233,8 +233,9 @@ footer.foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:
 .btn-lg{padding:18px 22px;font-size:1.15rem}
 .btn-sm{padding:9px 14px;font-size:.9rem}
 .cats{background:var(--surface);border-block:1px solid var(--line);padding-block:20px}
-.cats .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-@media (max-width:820px){.cats .wrap{grid-template-columns:repeat(3,1fr)}}
+.cats .wrap{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+@media (max-width:820px){.cats .wrap{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:480px){.cats .wrap{grid-template-columns:repeat(2,1fr)}}
 .cat{background:none;border:0;cursor:pointer;display:grid;gap:8px;justify-items:center;font-weight:600;padding:8px;border-radius:10px;color:var(--ink)}
 .cat:hover{background:var(--bg)}
 .cat-art{height:100px;width:100%;display:grid;place-items:center}
@@ -360,8 +361,21 @@ const SHAPES={
   arrow:{label:"Arrow",mult:1.25,note:"Points the way"},
   custom:{label:"Custom shape",mult:1.45,note:"Cut along your design",badge:"Most popular"}
 };
-const SAMPLE_ART="data:image/svg+xml;utf8,"+encodeURIComponent(
- `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><rect width="300" height="200" fill="#1F4FD8"/><rect x="10" y="10" width="280" height="180" fill="none" stroke="#FFC72C" stroke-width="4"/><text x="150" y="92" text-anchor="middle" font-family="Arial Narrow,Arial" font-weight="900" font-size="46" textLength="250" lengthAdjust="spacingAndGlyphs" fill="#fff">OPEN HOUSE</text><text x="150" y="132" text-anchor="middle" font-family="Arial" font-weight="700" font-size="20" fill="#FFC72C">SATURDAY 1–4 PM</text><text x="150" y="166" text-anchor="middle" font-family="Arial" font-size="15" fill="#fff">412 Maple Ave · Call 555-0142</text></svg>`);
+/* Sample artwork is drawn at the sign's exact proportions and shape, so it fills edge to edge with the text kept inside the safe area. */
+const artCache={};
+function sampleArt(w,h,shape){
+  const key=w+"x"+h+shape;if(artCache[key])return artCache[key];
+  const W=300,H=Math.round(300*h/w);
+  const safe={rect:[.08,.1,.84,.8],rounded:[.1,.12,.8,.76],circle:[.2,.22,.6,.56],custom:[.2,.22,.6,.56],arrow:[.04,.26,.64,.48]}[shape]||[.08,.1,.84,.8];
+  const sx=safe[0]*W,sy=safe[1]*H,sw=safe[2]*W,sh=safe[3]*H,cx=sx+sw/2;
+  const t=Math.min(sh*.34,sw*.2),tl=sw*.92;
+  const inset=`<g transform="translate(${W*.05} ${H*.05}) scale(.9)"><path d="${shapePath(shape,W,H)}" fill="none" stroke="#FFC72C" stroke-width="${Math.min(W,H)*.02/.9}"/></g>`;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#1F4FD8"/>${inset}`+
+   `<text x="${cx}" y="${sy+sh*.42}" text-anchor="middle" font-family="Arial Narrow,Arial" font-weight="900" font-size="${t}" textLength="${tl}" lengthAdjust="spacingAndGlyphs" fill="#fff">OPEN HOUSE</text>`+
+   `<text x="${cx}" y="${sy+sh*.68}" text-anchor="middle" font-family="Arial" font-weight="700" font-size="${t*.42}" fill="#FFC72C">SATURDAY 1–4 PM</text>`+
+   `<text x="${cx}" y="${sy+sh*.9}" text-anchor="middle" font-family="Arial" font-size="${t*.3}" textLength="${Math.min(tl,t*.3*15)}" lengthAdjust="spacingAndGlyphs" fill="#fff">412 Maple Ave · Call 555-0142</text></svg>`;
+  return artCache[key]="data:image/svg+xml;utf8,"+encodeURIComponent(svg);
+}
 
 /* ---------- state ---------- */
 const S={view:"home",pid:"yard",size:1,shape:"rect",cw:30,ch:20,qty:10,qtyCustom:false,addon:false,art:null,artName:"",notes:"",brief:"",designOpen:false,sizeHelp:false,editIx:null,
@@ -407,12 +421,12 @@ function mock(o,art,maxW=300,maxH=260,cut=false){
   const p=PRODUCTS[o.pid],[label,w,h]=sizeOf(o),shape=shapeOf(o);const r=Math.min(maxW/w,maxH/h);
   const pad=p.kind==="decal"?34:0,alt=`Artwork on a ${esc(label)} ${shape!=="rect"?esc(SHAPES[shape].label.toLowerCase())+" ":""}${esc(p.name.toLowerCase())}`;
   const wrap=inner=>`<div class="sign ${p.kind}" style="--leg:${Math.max(6,Math.round(h*r*.18))}px;width:min(${Math.round(w*r)+pad}px,100%)">${inner}</div>`;
-  if(shape==="rect"&&!cut)return wrap(`<div class="face" style="width:100%;aspect-ratio:${w}/${h}"><img alt="${alt}" src="${art||SAMPLE_ART}"></div>`);
+  if(shape==="rect"&&!cut)return wrap(`<div class="face" style="width:100%;aspect-ratio:${w}/${h}"><img alt="${alt}" src="${art||sampleArt(w,h,"rect")}"></div>`);
   const id="cp"+(++clipN),d=shapePath(shape,w,h),m=Math.min(w,h),edge=p.kind==="aluminum"?"var(--metal)":p.kind==="acrylic"?"rgba(160,200,230,.8)":"#fff";
   return wrap(`<div class="face shaped" style="width:100%;aspect-ratio:${w}/${h}"><svg viewBox="${-m*.04} ${-m*.04} ${w+m*.08} ${h+m*.08}" role="img" aria-label="${alt}">
     <defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>
     <path d="${d}" fill="var(--sign-face)" stroke="${edge}" stroke-width="${m*.05}"/>
-    <image href="${art||SAMPLE_ART}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" clip-path="url(#${id})"/>
+    <image href="${art||sampleArt(w,h,shape)}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>
     ${cut?`<path d="${d}" fill="none" stroke="#E0218A" stroke-width="${m*.012}" stroke-dasharray="${m*.04} ${m*.025}"/>`:""}
   </svg></div>`);
 }
