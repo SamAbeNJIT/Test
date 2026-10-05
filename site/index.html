@@ -1,0 +1,846 @@
+<title>Postline Signs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: retail storefront — slim promo bar, sticky header, one view at a time (home → product → upload → checkout → proof). Signal-yellow is reserved for the one primary action per screen. */
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#14213D; --muted:#596379; --line:#DCE1EA;
+  --accent:#FFC72C; --accent-ink:#14213D; --brand:#1F4FD8; --ok:#1B8754; --ok-bg:#E6F4EC; --warn:#A45A00; --warn-bg:#FFF3DD;
+  --sign-face:#FFFFFF; --glass:#CFE0EE; --metal:#B9C1CC; --stake:#7C8696;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px; --blue:#0B63E5; --on-blue:#FFFFFF;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1320; --surface:#161D2E; --ink:#E8ECF4; --muted:#9BA5B9; --line:#2A3347;
+  --accent:#FFC72C; --accent-ink:#14213D; --brand:#86A8FF; --ok:#4CC38A; --ok-bg:#12301F; --warn:#FFB54A; --warn-bg:#33260F;
+  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; --blue:#2F6FEB; --on-blue:#FFFFFF; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1320; --surface:#161D2E; --ink:#E8ECF4; --muted:#9BA5B9; --line:#2A3347;
+  --accent:#FFC72C; --accent-ink:#14213D; --brand:#86A8FF; --ok:#4CC38A; --ok-bg:#12301F; --warn:#FFB54A; --warn-bg:#33260F;
+  --sign-face:#F4F6FA; --glass:#2A4157; --metal:#5D6878; --stake:#6D7787; --blue:#2F6FEB; --on-blue:#FFFFFF; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);margin:0}
+h1,h2,h3{font-family:var(--display);font-stretch:85%;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:850}
+h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800}
+h3{font-size:1.15rem;font-weight:750}
+p{margin:0}
+a{color:var(--brand)}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.eyebrow{font:700 .75rem/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* promo bar + header */
+.promo{background:var(--ink);color:var(--bg);font-size:.85rem;font-weight:600;text-align:center;padding:8px 16px}
+.promo span{opacity:.6;padding-inline:8px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:20px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:900 1.35rem/1 var(--display);font-stretch:75%;letter-spacing:.02em;text-transform:uppercase;cursor:pointer;background:none;border:0;padding:0}
+.logo i{display:inline-grid;place-items:center;width:30px;height:30px;background:var(--accent);color:var(--accent-ink);border-radius:6px;font-style:normal;font-size:1rem;transform:rotate(-6deg)}
+nav.main{display:flex;gap:4px;margin-left:auto}
+nav.main button{background:none;border:0;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;color:var(--ink)}
+nav.main button:hover{background:var(--bg)}
+.cartbtn{display:flex;align-items:center;gap:8px;border:1px solid var(--line)!important}
+.cartbtn b{background:var(--accent);color:var(--accent-ink);border-radius:99px;min-width:22px;height:22px;display:inline-grid;place-items:center;font-size:.8rem}
+@media (max-width:640px){nav.main .hide-sm{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--r);padding:14px 22px;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none;transition:transform .08s ease, filter .15s}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.link{background:none;border:0;padding:0;color:var(--brand);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* stars / trust */
+.stars{color:#E8A400;letter-spacing:1px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 20px;font-weight:600;font-size:.9rem}
+.trust span::before{content:"✓ ";color:var(--ok)}
+
+/* home */
+.hero{padding-block:48px 40px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero-copy{display:grid;gap:18px;min-width:0}
+.hero-copy .lede{font-size:1.15rem;color:var(--muted);max-width:44ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+@media (max-width:820px){.hero .wrap{grid-template-columns:1fr}}
+section.block{padding-block:40px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.grid-products{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.grid-products{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.grid-products{grid-template-columns:1fr}}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;text-align:left;cursor:pointer;transition:border-color .15s, transform .15s}
+.pcard:hover{border-color:var(--ink);transform:translateY(-2px)}
+.pcard .thumb{background:var(--bg);border-radius:10px;height:170px;display:grid;place-items:center;overflow:hidden}
+.pcard .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pcard .from{font-weight:700}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+@media (max-width:820px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:460px){.steps{grid-template-columns:1fr}}
+.step{display:grid;gap:6px;align-content:start}
+.step::before{counter-increment:s;content:counter(s);font:900 1.1rem/1 var(--display);width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:var(--ink);color:var(--bg);margin-bottom:6px}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:820px){.reviews{grid-template-columns:1fr}}
+.review{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px;align-content:start}
+.band{background:var(--ink);color:var(--bg);border-radius:16px;padding:28px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.band .muted{color:inherit;opacity:.75}
+@media (max-width:700px){.band{grid-template-columns:1fr}}
+
+/* product page */
+.crumbs{font-size:.875rem;padding-block:18px 8px;color:var(--muted)}
+.crumbs button{background:none;border:0;padding:0;color:var(--brand);cursor:pointer;font-weight:600}
+.pdp{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start;padding-bottom:40px}
+@media (max-width:860px){.pdp{grid-template-columns:1fr}}
+.stage{position:sticky;top:84px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;gap:14px;min-width:0}
+@media (max-width:860px){.stage{position:static}}
+.stage-canvas{background:var(--bg);border-radius:12px;min-height:340px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:24px}
+.stage-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.875rem;color:var(--muted)}
+.config{display:grid;gap:22px;min-width:0}
+.config fieldset{border:0;padding:0;margin:0;display:grid;gap:8px}
+.config legend{font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;width:100%}
+.opt{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opt:hover{border-color:var(--muted)}
+.opt:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt input{accent-color:var(--ink);margin:0;width:18px;height:18px}
+.opt .price{font-weight:700;text-align:right}
+.save{font-size:.75rem;font-weight:700;color:var(--ok);background:var(--ok-bg);border-radius:99px;padding:2px 8px;white-space:nowrap}
+.save.none{visibility:hidden}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px}
+.summary .total{display:flex;justify-content:space-between;align-items:baseline}
+.summary .total strong{font:850 1.9rem/1 var(--display);font-stretch:85%}
+.ship-line{display:flex;gap:10px;align-items:center;font-size:.9rem;font-weight:600}
+.ship-line .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+details.faq{border-bottom:1px solid var(--line);padding-block:14px}
+details.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::after{content:"+";font-weight:800}
+details.faq[open] summary::after{content:"–"}
+details.faq p{margin-top:8px;color:var(--muted);max-width:65ch}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 20px;font-size:.9rem}
+.facts div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-block:6px}
+.facts dt{color:var(--muted)} .facts dd{margin:0;font-weight:600;text-align:right}
+@media (max-width:520px){.facts{grid-template-columns:1fr}}
+
+/* stepper */
+.stepper{display:flex;gap:6px;flex-wrap:wrap;padding-block:20px 6px;list-style:none;margin:0;padding-inline:0}
+.stepper li{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--muted)}
+.stepper li::after{content:"";width:28px;height:2px;background:var(--line)}
+.stepper li:last-child::after{display:none}
+.stepper .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);font-size:.75rem}
+.stepper .done{color:var(--ink)} .stepper .done .n{background:var(--ok);border-color:var(--ok);color:#fff}
+.stepper .cur{color:var(--ink)} .stepper .cur .n{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+
+/* upload */
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start;padding-block:16px 48px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:16px;min-width:0}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:32px 20px;text-align:center;display:grid;gap:10px;justify-items:center;cursor:pointer;transition:border-color .15s, background .15s}
+.drop:hover,.drop.over{border-color:var(--brand);background:var(--bg)}
+.drop .big{font:800 1.2rem/1.2 var(--display);font-stretch:90%}
+.filechip{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.filechip img{width:44px;height:44px;object-fit:contain;background:var(--bg);border-radius:6px}
+.filechip .name{font-weight:600;overflow-wrap:anywhere;min-width:0;flex:1}
+label.f{display:grid;gap:6px;font-weight:600;font-size:.9rem}
+input.t,textarea.t,select.t{border:1.5px solid var(--line);border-radius:9px;padding:11px 12px;background:var(--surface);width:100%;font-weight:400}
+input.t:focus,textarea.t:focus{border-color:var(--ink);outline:none}
+input.t.bad{border-color:#D23B3B}
+.err{color:#D23B3B;font-size:.8rem;font-weight:600}
+.callout{background:var(--warn-bg);color:var(--ink);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.callout.ok{background:var(--ok-bg)}
+
+/* checkout */
+.co{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start;padding-block:16px 48px}
+@media (max-width:860px){.co{grid-template-columns:1fr}}
+.co form{display:grid;gap:18px;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2,.grid3{grid-template-columns:1fr}}
+.express{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.express button{border-radius:9px;padding:12px;font-weight:700;border:0;cursor:pointer;background:var(--ink);color:var(--bg)}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.side{position:sticky;top:84px}
+@media (max-width:860px){.side{position:static}}
+.line-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:start;padding-block:12px;border-bottom:1px solid var(--line)}
+.line-item .mini{background:var(--bg);border-radius:8px;height:72px;display:grid;place-items:center;overflow:hidden;padding:6px}
+.line-item .acts{display:flex;gap:14px;font-size:.85rem}
+.totals{display:grid;gap:6px;padding-top:12px}
+.totals div{display:flex;justify-content:space-between}
+.totals .grand{font-weight:800;font-size:1.2rem;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.free{color:var(--ok);font-weight:700}
+
+/* confirmation timeline */
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.timeline li{display:grid;grid-template-columns:28px 1fr;gap:14px;padding-bottom:20px;position:relative}
+.timeline li::before{content:"";position:absolute;left:13px;top:26px;bottom:0;width:2px;background:var(--line)}
+.timeline li:last-child::before{display:none}
+.timeline .b{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:.8rem;font-weight:800}
+.timeline .is-done .b{background:var(--ok);border-color:var(--ok);color:#fff}
+.timeline .is-now .b{border-color:var(--ink);background:var(--accent);color:var(--accent-ink)}
+
+/* proof */
+.proofsheet{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:16px;min-width:0}
+.proof-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.pill{font-size:.75rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:99px;padding:4px 10px;background:var(--warn-bg);color:var(--warn)}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.dim{display:grid;width:100%;grid-template-columns:auto minmax(0,1fr);gap:0;align-items:center}
+.dim .h{grid-column:2;text-align:center;font-size:.8rem;font-weight:700;color:var(--muted);border-top:1.5px solid var(--muted);margin-top:8px;padding-top:4px}
+.dim .v{grid-row:1;writing-mode:vertical-rl;transform:rotate(180deg);font-size:.8rem;font-weight:700;color:var(--muted);border-right:1.5px solid var(--muted);margin-right:8px;padding-right:4px;text-align:center}
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.9rem}
+.checks li::before{content:"✓";color:var(--ok);font-weight:800;margin-right:8px}
+.confirm-box{border:1.5px solid var(--ink);border-radius:12px;padding:16px;display:grid;gap:12px}
+.history{font-size:.85rem;display:grid;gap:8px}
+.history div{border-left:3px solid var(--line);padding-left:10px}
+
+/* sign mockups (pure CSS) */
+.sign{position:relative;display:grid;place-items:center;width:100%;min-width:0}
+.stage-canvas>*,.dim>*{min-width:0;max-width:100%}
+.sign .face{background:var(--sign-face);box-shadow:0 10px 24px rgba(10,20,40,.18);display:grid;place-items:center;overflow:hidden;position:relative;max-width:100%}
+.sign .face img{width:100%;height:100%;object-fit:contain;display:block}
+.sign.yard .face{border-radius:3px;border:1px solid rgba(0,0,0,.08)}
+.sign.yard{padding-bottom:var(--leg,24px)}
+.sign.yard::after{content:"";position:absolute;bottom:0;left:19%;right:19%;height:var(--leg,24px);border:3px solid var(--stake);border-top:0;border-bottom:0}
+.sign.banner .face{border-radius:2px}
+.sign.banner .face::before,.sign.banner .face::after{content:"";position:absolute;top:6px;width:9px;height:9px;border-radius:50%;background:var(--metal);box-shadow:0 0 0 2px #fff inset}
+.sign.banner .face::before{left:6px}.sign.banner .face::after{right:6px}
+.sign.aluminum .face{border-radius:10px;border:5px solid var(--metal)}
+.sign.acrylic .face{border-radius:6px;border:6px solid rgba(160,200,230,.55);box-shadow:0 14px 30px rgba(10,20,40,.22), inset 0 0 0 1px rgba(255,255,255,.6)}
+.sign.acrylic .face::before,.sign.acrylic .face::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(#fff,var(--metal));top:8px}
+.sign.acrylic .face::before{left:8px}.sign.acrylic .face::after{right:8px}
+.sign.aframe{padding-bottom:calc(var(--leg,24px)*.7)}
+.sign.aframe .face{border:8px solid #2B2F36;border-radius:4px}
+.sign.aframe::after{content:"";position:absolute;bottom:0;left:4%;right:4%;height:calc(var(--leg,24px)*.7);border-left:6px solid #2B2F36;border-right:6px solid #2B2F36}
+.sign.decal{background:var(--glass);padding:12px;border-radius:6px;border:5px solid var(--metal)}
+.sign.decal .face{background:transparent;box-shadow:none}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:10px;font-weight:600;z-index:50;max-width:calc(100% - 32px)}
+
+footer.foot{border-top:1px solid var(--line);margin-top:24px;padding-block:28px;font-size:.875rem;color:var(--muted)}
+footer.foot .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.view{animation:in .25s ease}
+@keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}.pcard,.btn{transition:none}}
+/* v2: patterns verified from Sticker Mule screenshots */
+.btn-blue{background:var(--blue);color:var(--on-blue)}
+.btn-blue:hover{filter:brightness(1.08)}
+.btn-lg{padding:18px 22px;font-size:1.15rem}
+.btn-sm{padding:9px 14px;font-size:.9rem}
+.cats{background:var(--surface);border-block:1px solid var(--line);padding-block:20px}
+.cats .wrap{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+@media (max-width:820px){.cats .wrap{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:480px){.cats .wrap{grid-template-columns:repeat(2,1fr)}}
+.cat{background:none;border:0;cursor:pointer;display:grid;gap:8px;justify-items:center;font-weight:600;padding:8px;border-radius:10px;color:var(--ink)}
+.cat:hover{background:var(--bg)}
+.cat-art{height:100px;width:100%;display:grid;place-items:center}
+.sort{border:0;background:transparent;font-weight:700;color:var(--ink)}
+.pdp-main{display:grid;gap:18px;min-width:0}
+.title-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.title-row .rv{font-weight:700;text-decoration:none}
+.lede-sm{max-width:60ch}
+.stage{position:static}
+.cfgcard{position:sticky;top:84px;background:var(--surface);border:3px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:20px;min-width:0}
+@media (max-width:860px){.cfgcard{position:static}}
+.cfgcard fieldset{border:0;padding:0;margin:0;display:grid;gap:2px}
+.lg{display:flex;justify-content:space-between;align-items:baseline;width:100%;font:800 1.2rem/1.2 var(--display);font-stretch:90%;margin-bottom:8px}
+.lg .link{font:700 .95rem var(--body);text-decoration:none}
+.rad{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;padding:6px 2px;cursor:pointer;border-radius:6px}
+.rad:hover{background:var(--bg)}
+.rad input{accent-color:var(--blue);width:18px;height:18px;margin:0}
+.qrow{grid-template-columns:auto 1fr auto 82px}
+.qrow .price{text-align:right}
+.save-t{color:var(--ok);font-size:.9rem;text-align:right}
+.custom-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;padding:6px 0}
+.cfg-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.cfg-total strong{font:850 2.2rem/1 var(--display);font-stretch:85%}
+.next-hint{text-align:center;color:var(--muted);font-size:.95rem;margin-top:-8px}
+.narrow{max-width:760px;display:grid;gap:18px;padding-bottom:48px}
+.up-head{text-align:center;display:grid;gap:8px}
+.drop{background:var(--bg);padding:48px 20px}
+.alt-opt{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;font-weight:700;color:var(--brand);cursor:pointer}
+.alt-opt:hover{border-color:var(--brand)}
+.skip{text-align:center;font-size:1.1rem}
+.skip .link{text-decoration:none}
+.up-preview{background:var(--bg);border-radius:12px;padding:20px;display:grid;place-items:center}
+.cart{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
+@media (max-width:860px){.cart{grid-template-columns:1fr}}
+.ctable{display:grid;min-width:0}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) 96px 90px 32px;gap:14px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line)}
+.chead{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding-block:8px;border-bottom:2px solid var(--line)}
+.cdesc{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center}
+.cdesc .mini{background:var(--bg);border-radius:8px;height:72px;display:grid;place-items:center;padding:6px;box-shadow:0 2px 6px rgba(10,20,40,.12)}
+.cdesc .link{text-decoration:none;justify-self:start}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qty-in{width:96px}
+.rm{width:28px;height:28px;border-radius:50%;border:0;background:var(--line);color:var(--ink);font-weight:800;cursor:pointer}
+@media (max-width:560px){.crow{grid-template-columns:minmax(0,1fr) 80px;}.crow .qty-in{width:80px}.chead{display:none}}
+.csum{display:grid;gap:14px;justify-items:center}
+.csum-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:10px;text-align:center;width:100%}
+.csum .link{text-decoration:none}
+.xsell{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(160px,1fr);gap:14px;overflow-x:auto;padding-bottom:8px}
+.xs{background:none;border:0;cursor:pointer;display:grid;gap:8px;text-align:left;font-weight:600;color:var(--ink)}
+.xs .thumb{background:var(--surface);border:1px solid var(--line);border-radius:10px;height:120px;display:grid;place-items:center;padding:10px}
+.face.shaped{background:transparent;box-shadow:none;border:0!important;border-radius:0!important;overflow:visible}
+.face.shaped::before,.face.shaped::after{display:none}
+.face.shaped svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 8px 14px rgba(10,20,40,.22))}
+.sign.shaped .face{box-shadow:none}
+.shapes{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.shape-tile{position:relative;display:grid;justify-items:center;gap:4px;text-align:center;border:1.5px solid var(--line);border-radius:10px;padding:12px 6px 10px;cursor:pointer;font-size:.85rem;background:var(--surface)}
+.shape-tile:hover{border-color:var(--muted)}
+.shape-tile:has(input:checked){border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.shape-tile:has(input:focus-visible){outline:3px solid var(--brand);outline-offset:2px}
+.shape-tile input{position:absolute;opacity:0;pointer-events:none}
+.shape-tile svg{width:40px;height:32px;fill:var(--bg);stroke:var(--ink);stroke-width:1.5}
+.shape-tile:has(input:checked) svg{fill:var(--accent)}
+.shape-tile .badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--accent);color:var(--accent-ink);font-size:.68rem;font-weight:800;border-radius:99px;padding:2px 8px}
+.shape-promo{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center}
+@media (max-width:820px){.shape-promo{grid-template-columns:1fr}}
+.shape-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;min-width:0}
+.shape-row>div{display:grid;justify-items:center;gap:8px;min-width:0}
+.promo-pop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(340px,calc(100% - 32px));background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(10,20,40,.22);padding:20px;display:grid;gap:10px;z-index:40}
+.promo-pop .x{position:absolute;top:8px;right:10px;background:none;border:0;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+</style>
+
+<div class="promo">Free shipping on every order<span>•</span>Free online proofs<span>•</span>Printed in 4 days</div>
+<header class="top">
+  <div class="wrap">
+    <button class="logo" data-go="home" aria-label="Postline Signs home"><i>P</i>Postline</button>
+    <nav class="main" aria-label="Main">
+      <button data-go="home" data-scroll="products" class="hide-sm">All signs</button>
+      <button data-go="product" data-p="yard" data-qty="1" class="hide-sm">Try 1 sign</button>
+      <button data-go="home" data-scroll="reviews" class="hide-sm">Reviews</button>
+      <button class="cartbtn" data-go="cart" aria-label="Cart">Cart <b id="cartCount">0</b></button>
+    </nav>
+  </div>
+</header>
+<main id="app"></main>
+<footer class="foot"><div class="wrap"><span>Postline Signs is a fictional company. Demo storefront for a UX class project, modeled on Sticker Mule's ordering flow.</span><span>Help: hello@postline.example</span></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+/* ---------- data ---------- */
+const QTY=[1,5,10,25,50,100,250];
+const TIERS=[[1,1],[5,.82],[10,.7],[25,.58],[50,.5],[100,.42],[250,.36]];
+const PRODUCTS={
+  yard:{name:"Yard signs",kind:"yard",blurb:"Corrugated plastic signs with optional H-stakes. Built for elections, open houses and job sites. Weatherproof and readable from across the street.",
+    material:"4mm corrugated plastic",print:"Full color, 1 or 2 sided",use:"Outdoor, 1–2 years",
+    sizes:[["18 × 12 in",18,12,14],["24 × 18 in",24,18,19],["36 × 24 in",36,24,29]],addon:{label:"Add H-stakes",price:2},shapes:["rect","rounded","arrow","custom"]},
+  banners:{name:"Vinyl banners",kind:"banner",blurb:"13 oz scrim vinyl with hemmed edges and grommets every 2 ft. Hang it on a fence, a storefront or a stage.",
+    material:"13 oz scrim vinyl",print:"Full color, UV-resistant ink",use:"Outdoor, 3+ years",
+    sizes:[["4 × 2 ft",48,24,39],["6 × 3 ft",72,36,69],["8 × 4 ft",96,48,109]]},
+  aluminum:{name:"Aluminum signs",kind:"aluminum",blurb:"Rust-proof .040 aluminum with rounded corners and pre-drilled holes. Made for parking, safety and storefront signs.",
+    material:".040 aluminum",print:"Full color, laminated",use:"Outdoor, 7+ years",
+    sizes:[["18 × 12 in",18,12,29],["24 × 18 in",24,18,45],["36 × 24 in",36,24,79]],shapes:["rect","rounded","circle","arrow","custom"]},
+  acrylic:{name:"Acrylic signs",kind:"acrylic",blurb:"Clear 1/4 in acrylic with brushed standoffs. Lobby and office signs that look expensive.",
+    material:'1/4" clear acrylic',print:"Reverse-printed, white backer",use:"Indoor",
+    sizes:[["12 × 12 in",12,12,59],["24 × 18 in",24,18,99],["36 × 24 in",36,24,169]],shapes:["rect","rounded","circle","custom"]},
+  aframe:{name:"A-frame signs",kind:"aframe",blurb:"Folding sidewalk sign with two printed inserts. Swap the inserts whenever your specials change.",
+    material:"Steel frame + coroplast inserts",print:"Full color, both sides",use:"Outdoor, daily use",
+    sizes:[["24 × 36 in",24,36,149]]},
+  shaped:{name:"Custom shape signs",kind:"shaped",blurb:"Signs cut to the outline of your logo, mascot or product. Rigid 3mm PVC that stops people on the sidewalk. No setup fee, no die charge.",
+    material:"3mm white PVC",print:"Full color, UV-resistant ink",use:"Indoor or covered outdoor, 3+ years",
+    sizes:[["12 × 12 in",12,12,39],["18 × 18 in",18,18,59],["24 × 24 in",24,24,95]],shapes:["custom","circle","arrow","rounded"]},
+  decals:{name:"Window decals",kind:"decal",blurb:"Removable vinyl for glass. Store hours, logos and sale signs that peel off with no residue.",
+    material:"Removable white vinyl",print:"Full color, die cut",use:"Indoor or outdoor glass",
+    sizes:[["6 × 6 in",6,6,6],["12 × 12 in",12,12,12],["24 × 24 in",24,24,28]],shapes:["rect","circle","custom"]}
+};
+const ORDER=["shaped","yard","banners","aluminum","acrylic","aframe","decals"];
+const REVIEWS={shaped:1874,yard:3384,banners:4317,aluminum:2951,acrylic:1288,aframe:906,decals:2410};
+/* Shape premiums: cut time on the router is small, perceived value is high — this is where margin lives. */
+const SHAPES={
+  rect:{label:"Rectangle",mult:1,note:"Standard"},
+  rounded:{label:"Rounded corners",mult:1.1,note:"Softer, safer edges"},
+  circle:{label:"Circle / oval",mult:1.2,note:"Fits your size box"},
+  arrow:{label:"Arrow",mult:1.25,note:"Points the way"},
+  custom:{label:"Custom shape",mult:1.45,note:"Cut along your design",badge:"Most popular"}
+};
+/* Sample artwork is drawn at the sign's exact proportions and shape, so it fills edge to edge with the text kept inside the safe area. */
+const artCache={};
+function sampleArt(w,h,shape){
+  const key=w+"x"+h+shape;if(artCache[key])return artCache[key];
+  const W=300,H=Math.round(300*h/w);
+  const safe={rect:[.08,.1,.84,.8],rounded:[.1,.12,.8,.76],circle:[.2,.22,.6,.56],custom:[.2,.22,.6,.56],arrow:[.04,.26,.64,.48]}[shape]||[.08,.1,.84,.8];
+  const sx=safe[0]*W,sy=safe[1]*H,sw=safe[2]*W,sh=safe[3]*H,cx=sx+sw/2;
+  const t=Math.min(sh*.34,sw*.2),tl=sw*.92;
+  const inset=`<g transform="translate(${W*.05} ${H*.05}) scale(.9)"><path d="${shapePath(shape,W,H)}" fill="none" stroke="#FFC72C" stroke-width="${Math.min(W,H)*.02/.9}"/></g>`;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#1F4FD8"/>${inset}`+
+   `<text x="${cx}" y="${sy+sh*.42}" text-anchor="middle" font-family="Arial Narrow,Arial" font-weight="900" font-size="${t}" textLength="${tl}" lengthAdjust="spacingAndGlyphs" fill="#fff">OPEN HOUSE</text>`+
+   `<text x="${cx}" y="${sy+sh*.68}" text-anchor="middle" font-family="Arial" font-weight="700" font-size="${t*.42}" fill="#FFC72C">SATURDAY 1–4 PM</text>`+
+   `<text x="${cx}" y="${sy+sh*.9}" text-anchor="middle" font-family="Arial" font-size="${t*.3}" textLength="${Math.min(tl,t*.3*15)}" lengthAdjust="spacingAndGlyphs" fill="#fff">412 Maple Ave · Call 555-0142</text></svg>`;
+  return artCache[key]="data:image/svg+xml;utf8,"+encodeURIComponent(svg);
+}
+
+/* ---------- state ---------- */
+const S={view:"home",pid:"yard",size:1,shape:"rect",cw:30,ch:20,qty:10,qtyCustom:false,addon:false,art:null,artName:"",notes:"",brief:"",designOpen:false,sizeHelp:false,editIx:null,
+  cart:[],discount:0,promo:"open",order:null,proof:{status:"ready",version:1,history:[],confirming:false,changing:false}};
+try{const saved=JSON.parse(localStorage.getItem("postline-cart")||"[]");if(Array.isArray(saved))S.cart=saved.filter(i=>PRODUCTS[i.pid])}catch(e){}
+try{if(localStorage.getItem("postline-promo"))S.promo="closed"}catch(e){}
+function saveCart(){try{localStorage.setItem("postline-cart",JSON.stringify(S.cart.map(i=>({...i,art:i.art&&i.art.length<400000?i.art:null}))))}catch(e){}}
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money2=n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const money=n=>money2(n).replace(/\.00$/,"");
+const disc=q=>TIERS.filter(t=>q>=t[0]).pop()[1];
+function sizeOf(o){
+  const p=PRODUCTS[o.pid];
+  if(o.size!==-1)return p.sizes[o.size];
+  const ref=p.sizes[Math.min(1,p.sizes.length-1)];
+  return [`${o.cw} × ${o.ch} in (custom)`,o.cw,o.ch,Math.max(5,ref[3]*(o.cw*o.ch)/(ref[1]*ref[2]))];
+}
+const shapeOf=o=>(PRODUCTS[o.pid].shapes||["rect"]).includes(o.shape)?o.shape:(PRODUCTS[o.pid].shapes||["rect"])[0];
+const unit=o=>sizeOf(o)[3]*SHAPES[shapeOf(o)].mult*disc(o.qty);
+const desc=o=>sizeOf(o)[0]+(shapeOf(o)!=="rect"?" · "+SHAPES[shapeOf(o)].label:"");
+const lineTotal=o=>(unit(o)+(o.addon?PRODUCTS[o.pid].addon.price:0))*o.qty;
+const subtotal=()=>S.cart.reduce((a,i)=>a+lineTotal(i),0);
+const discountFor=sub=>S.discount&&sub>=30?S.discount:0;
+function bizDays(n){const d=new Date();let k=0;while(k<n){d.setDate(d.getDate()+1);const w=d.getDay();if(w&&w<6)k++}return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2600)}
+const cur=()=>({pid:S.pid,size:S.size,shape:S.shape,cw:S.cw,ch:S.ch,qty:S.qty,addon:S.addon});
+
+function shapePath(shape,w,h){
+  const m=Math.min(w,h);
+  if(shape==="rounded"){const r=m*.12;return `M${r} 0H${w-r}A${r} ${r} 0 0 1 ${w} ${r}V${h-r}A${r} ${r} 0 0 1 ${w-r} ${h}H${r}A${r} ${r} 0 0 1 0 ${h-r}V${r}A${r} ${r} 0 0 1 ${r} 0Z`}
+  if(shape==="circle")return `M0 ${h/2}A${w/2} ${h/2} 0 1 0 ${w} ${h/2}A${w/2} ${h/2} 0 1 0 0 ${h/2}Z`;
+  if(shape==="arrow")return `M0 ${h*.2}H${w*.72}V0L${w} ${h/2}L${w*.72} ${h}V${h*.8}H0Z`;
+  if(shape==="custom"){ /* organic contour: stands in for "follows your artwork" */
+    const n=36,pts=[];for(let k=0;k<n;k++){const t=k/n*Math.PI*2,f=.9+.07*Math.sin(5*t)+.03*Math.cos(3*t);pts.push([w/2+Math.cos(t)*w/2*f,h/2+Math.sin(t)*h/2*f])}
+    let d="";for(let k=0;k<n;k++){const a=pts[k],b=pts[(k+1)%n],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;d+=(k?"":`M${mx} ${my}`)+`Q${b[0]} ${b[1]} ${(b[0]+pts[(k+2)%n][0])/2} ${(b[1]+pts[(k+2)%n][1])/2}`}return d+"Z"}
+  return `M0 0H${w}V${h}H0Z`;
+}
+let clipN=0;
+function mock(o,art,maxW=300,maxH=260,cut=false){
+  const p=PRODUCTS[o.pid],[label,w,h]=sizeOf(o),shape=shapeOf(o);const r=Math.min(maxW/w,maxH/h);
+  const pad=p.kind==="decal"?34:0,alt=`Artwork on a ${esc(label)} ${shape!=="rect"?esc(SHAPES[shape].label.toLowerCase())+" ":""}${esc(p.name.toLowerCase())}`;
+  const wrap=inner=>`<div class="sign ${p.kind}" style="--leg:${Math.max(6,Math.round(h*r*.18))}px;width:min(${Math.round(w*r)+pad}px,100%)">${inner}</div>`;
+  if(shape==="rect"&&!cut)return wrap(`<div class="face" style="width:100%;aspect-ratio:${w}/${h}"><img alt="${alt}" src="${art||sampleArt(w,h,"rect")}"></div>`);
+  const id="cp"+(++clipN),d=shapePath(shape,w,h),m=Math.min(w,h),edge=p.kind==="aluminum"?"var(--metal)":p.kind==="acrylic"?"rgba(160,200,230,.8)":"#fff";
+  return wrap(`<div class="face shaped" style="width:100%;aspect-ratio:${w}/${h}"><svg viewBox="${-m*.04} ${-m*.04} ${w+m*.08} ${h+m*.08}" role="img" aria-label="${alt}">
+    <defs><clipPath id="${id}"><path d="${d}"/></clipPath></defs>
+    <path d="${d}" fill="var(--sign-face)" stroke="${edge}" stroke-width="${m*.05}"/>
+    <image href="${art||sampleArt(w,h,shape)}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>
+    ${cut?`<path d="${d}" fill="none" stroke="#E0218A" stroke-width="${m*.012}" stroke-dasharray="${m*.04} ${m*.025}"/>`:""}
+  </svg></div>`);
+}
+function stepper(c){
+  const steps=["Choose options","Upload artwork","Cart & checkout","Approve proof"];
+  return `<ol class="stepper" aria-label="Order progress">${steps.map((s,i)=>`<li class="${i<c?"done":i===c?"cur":""}" ${i===c?'aria-current="step"':""}><span class="n">${i<c?"✓":i+1}</span>${s}</li>`).join("")}</ol>`;
+}
+
+/* ---------- views ---------- */
+const V={};
+V.home=()=>`
+<section class="hero"><div class="wrap">
+  <div class="hero-copy">
+    <span class="eyebrow">Custom signs for small businesses</span>
+    <h1>Custom signs, printed and shipped in 4 days.</h1>
+    <p class="lede">Free shipping. Free online proofs. Pay only after you approve.</p>
+    <div class="hero-cta"><button class="btn btn-blue" data-go="home" data-scroll="products">Shop signs</button><button class="btn btn-ghost" data-go="product" data-p="yard" data-qty="1">Try 1 sign</button></div>
+    <div class="small"><span class="stars" aria-hidden="true">★★★★★</span> <b>4.9</b> from <u>12,480 reviews</u> · Trusted by <u>3,200 local businesses</u></div>
+  </div>
+  <div style="display:grid;place-items:center">${mock({pid:"yard",size:1},null,340,300)}</div>
+</div></section>
+
+<section class="cats"><div class="wrap">
+  ${ORDER.map(pid=>`<button class="cat" data-go="product" data-p="${pid}"><span class="cat-art">${mock({pid,size:Math.min(1,PRODUCTS[pid].sizes.length-1)},null,92,56)}</span>${PRODUCTS[pid].name}</button>`).join("")}
+</div></section>
+
+<section class="block" id="products"><div class="wrap">
+  <div class="sec-head"><h2>All signs</h2><label class="small muted" for="sort">Sort by <select id="sort" class="sort"><option>Most popular</option><option>Price: low to high</option></select></label></div>
+  <div class="grid-products">${(S.sort==="price"?[...ORDER].sort((a,b)=>PRODUCTS[a].sizes[0][3]-PRODUCTS[b].sizes[0][3]):ORDER).map(pid=>{const p=PRODUCTS[pid];return `
+    <button class="pcard" data-go="product" data-p="${pid}">
+      <div class="thumb">${mock({pid,size:Math.min(1,p.sizes.length-1)},null,190,130)}</div>
+      <h3>${p.name}</h3>
+      <span class="muted small">${p.material} · ${p.use}</span>
+    </button>`}).join("")}</div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <div class="shape-promo">
+    <div style="display:grid;gap:12px;min-width:0">
+      <span class="eyebrow">Custom shape signs</span>
+      <h2>Your logo, cut to its own shape.</h2>
+      <p class="muted">Rectangles blend in. A sign cut to the outline of your logo or mascot gets noticed from across the street. No setup fee, and your free proof shows the exact cut line.</p>
+      <div><button class="btn btn-primary" data-go="product" data-p="shaped">Design a custom shape</button></div>
+    </div>
+    <div class="shape-row">${["custom","circle","arrow"].map(k=>`<div>${mock({pid:"shaped",size:1,shape:k},null,150,120)}<span class="small muted">${SHAPES[k].label}</span></div>`).join("")}</div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <div class="sec-head"><h2>How ordering works</h2></div>
+  <div class="steps">
+    <div class="step"><h3>Pick size and quantity</h3><p class="muted">Live prices for every option. No quote forms.</p></div>
+    <div class="step"><h3>Upload your design</h3><p class="muted">Any file type. No design? We'll make one, or email it later.</p></div>
+    <div class="step"><h3>Approve your free proof</h3><p class="muted">Ready in about 4 hours. Ask for unlimited changes.</p></div>
+    <div class="step"><h3>We print and ship free</h3><p class="muted">Printed in 4 days. Your card is charged only after approval.</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="reviews"><div class="wrap">
+  <div class="sec-head"><h2>Reviews from real orders</h2><span class="muted small">Sample reviews for this demo</span></div>
+  <div class="reviews">
+    <div class="review"><span class="stars">★★★★★</span><b>Proof came back before lunch</b><p class="muted">Ordered 25 yard signs at 9am, had a proof by noon. They fixed my bleed without me asking.</p><span class="small muted">Dana R. · Yard signs, 24 × 18 in</span></div>
+    <div class="review"><span class="stars">★★★★★</span><b>Easiest order I've placed</b><p class="muted">I knew the price before I uploaded anything. No "request a quote" email chain.</p><span class="small muted">Marcus T. · Vinyl banner, 6 × 3 ft</span></div>
+    <div class="review"><span class="stars">★★★★☆</span><b>Great sign, asked for one change</b><p class="muted">Wanted the logo bigger. Typed it in the proof comments and v2 showed up an hour later.</p><span class="small muted">Priya S. · Aluminum sign, 18 × 12 in</span></div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <div class="band"><div style="display:grid;gap:8px"><h2>Happy or we reprint it.</h2><p class="muted">If a sign arrives damaged or wrong, we reprint or refund it. No return shipping.</p></div><button class="btn btn-primary" data-go="home" data-scroll="products">Start an order</button></div>
+</div></section>
+${S.promo==="open"?`
+<aside class="promo-pop" aria-label="First order discount">
+  <button class="x" data-act="closepromo" aria-label="Close">×</button>
+  <b>$10 off your first order</b>
+  <span class="small muted">Valid on one order of $30 or more.</span>
+  <input class="t" id="promoEmail" type="email" placeholder="Email address" autocomplete="email">
+  <span class="err" id="promoErr" hidden>Enter an email to get the code.</span>
+  <button class="btn btn-blue btn-block" data-act="claim">Claim</button>
+</aside>`:""}`;
+
+V.product=()=>{
+  const p=PRODUCTS[S.pid],addon=p.addon,o=cur();
+  const u=unit(o)+(S.addon&&addon?addon.price:0);
+  return `
+<div class="wrap">
+  <div class="crumbs"><button data-go="home" data-scroll="products">All signs</button> / ${p.name}</div>
+  <div class="pdp">
+    <div class="pdp-main">
+      <div class="title-row"><h1>${p.name}</h1><span class="stars" aria-hidden="true">★★★★★</span><a href="#reviews" data-go="home" data-scroll="reviews" class="rv">${REVIEWS[S.pid].toLocaleString()} reviews</a></div>
+      <p class="muted lede-sm">${p.blurb}</p>
+      <div><button class="btn btn-ghost btn-sm" data-act="sample">Order 1 sample sign</button></div>
+      <div class="stage">
+        <div class="stage-canvas" id="stage">${mock(o,S.art,420,320,shapeOf(o)!=="rect")}</div>
+        <div class="stage-cap"><span>Preview at <span id="slabel">${esc(desc(o))}</span>. Sample artwork until you upload yours.${shapeOf(o)!=="rect"?" Pink dashes show the cut line.":""}</span><span>${p.material}</span></div>
+      </div>
+      <dl class="facts">
+        <div><dt>Material</dt><dd>${p.material}</dd></div><div><dt>Print</dt><dd>${p.print}</dd></div>
+        <div><dt>Lifespan</dt><dd>${p.use}</dd></div><div><dt>Turnaround</dt><dd>4 business days</dd></div>
+      </dl>
+      <div>
+        <h3 style="margin-bottom:4px">Questions</h3>
+        <details class="faq"><summary>What if my file isn't print-ready?</summary><p>Upload what you have. Our prepress team fixes resolution, bleed and color, and shows you the result on your proof before anything prints.</p></details>
+        <details class="faq"><summary>When am I charged?</summary><p>We save your card at checkout but only charge it after you approve your proof. Cancel any time before approval for free.</p></details>
+        <details class="faq"><summary>Can I change my order after checkout?</summary><p>Yes. Request size, quantity or design changes from your proof page as many times as you need.</p></details>
+      </div>
+    </div>
+    <div class="cfgcard">
+      ${p.shapes?`<fieldset><legend class="lg"><span>Select a shape</span></legend>
+        <div class="shapes">${p.shapes.map(k=>{const sh=SHAPES[k];return `<label class="shape-tile${sh.badge?" featured":""}"><input type="radio" name="shape" id="shape-${k}" value="${k}" ${shapeOf(o)===k?"checked":""}>
+          <svg viewBox="-2 -2 28 22" aria-hidden="true"><path d="${shapePath(k,24,18)}"/></svg><b>${sh.label}</b><span class="small muted">${sh.mult>1?`+${Math.round((sh.mult-1)*100)}%`:sh.note}</span>${sh.badge?`<span class="badge">${sh.badge}</span>`:""}</label>`}).join("")}</div>
+        ${shapeOf(o)==="custom"?`<div class="callout ok small">We cut along the outline of your design, with a thin white border. No setup fee. Your proof shows the exact cut line.</div>`:""}
+      </fieldset>`:""}
+      <fieldset><legend class="lg"><span>Select a size</span><button class="link" data-act="sizehelp" aria-expanded="${S.sizeHelp}">Size help</button></legend>
+        ${S.sizeHelp?`<div class="callout small">Rule of thumb: every 1 in of letter height reads from about 10 ft away. Most yard signs are 24 × 18 in.</div>`:""}
+        ${p.sizes.map((s,i)=>`<label class="rad"><input type="radio" name="size" id="size-${i}" value="${i}" ${i===S.size?"checked":""}><span>${s[0]}</span></label>`).join("")}
+        <label class="rad"><input type="radio" name="size" id="size--1" value="-1" ${S.size===-1?"checked":""}><span>Custom size</span></label>
+        ${S.size===-1?`<div class="custom-row"><label class="f" for="cw">Width (in)<input class="t" id="cw" type="number" min="4" max="120" value="${S.cw}"></label><span>×</span><label class="f" for="ch">Height (in)<input class="t" id="ch" type="number" min="4" max="120" value="${S.ch}"></label></div>`:""}
+      </fieldset>
+      <fieldset><legend class="lg"><span>Select a quantity</span></legend>
+        ${QTY.map(q=>{const t=disc(q),save=Math.round((1-t)*100);return `<label class="rad qrow"><input type="radio" name="qty" id="qty-${q}" value="${q}" ${!S.qtyCustom&&q===S.qty?"checked":""}><span class="num">${q.toLocaleString()}</span><span class="num price" id="qp-${q}">${money(lineTotal({...o,qty:q,addon:false}))}</span><span class="save-t">${save?`Save ${save}%`:""}</span></label>`}).join("")}
+        <label class="rad"><input type="radio" name="qty" id="qty-custom" value="custom" ${S.qtyCustom?"checked":""}><span>Custom quantity</span></label>
+        ${S.qtyCustom?`<label class="f" for="cqty">How many signs?<input class="t" id="cqty" type="number" min="1" max="10000" value="${S.qty}"></label>`:""}
+      </fieldset>
+      ${addon?`<label class="rad"><input type="checkbox" id="addon" ${S.addon?"checked":""}><span>${addon.label} <span class="muted small">+${money(addon.price)}/sign</span></span></label>`:""}
+      <div class="cfg-total"><strong class="num" id="ptotal">${money(u*S.qty)}</strong><span class="num muted" id="punit">${money2(u)} / sign</span></div>
+      <button class="btn btn-primary btn-block btn-lg" data-act="continue">${S.editIx!=null?"Update item":"Continue"}</button>
+      <p class="next-hint">Next: upload artwork →</p>
+      <div class="ship-line"><span class="dot"></span>Free shipping. Arrives by ${bizDays(6)} if you approve your proof today.</div>
+    </div>
+  </div>
+</div>`;};
+
+V.upload=()=>{
+  const p=PRODUCTS[S.pid],o=cur();
+  return `
+<div class="wrap narrow">
+  ${stepper(1)}
+  <div class="up-head"><h1>Upload your artwork</h1><p class="muted">Free artwork setup. Online proof. Pay only after you approve.</p></div>
+  ${S.artName?`
+  <div class="panel">
+    <div class="up-preview">${mock(o,S.art,320,240,shapeOf(o)!=="rect")}</div>
+    <div class="filechip">${S.art?`<img src="${S.art}" alt="">`:""}<span class="name">${esc(S.artName)}</span><label class="link" for="file">Change file</label><input id="file" type="file" accept="image/*,.pdf,.ai,.eps,.svg" hidden></div>
+    ${S.art?`<div class="callout ok">Looks good. Our designers check every file before your proof.</div>`:`<div class="callout">We can't preview this file type here, but we'll use it for your proof.</div>`}
+    <label class="f" for="notes">Notes for our designers <span class="muted" style="font-weight:400">(optional)</span><textarea class="t" id="notes" rows="2" placeholder="Example: make the phone number bigger">${esc(S.notes)}</textarea></label>
+    <div class="cfg-total small"><span><b>${S.qty.toLocaleString()} × ${esc(desc(o))}</b> ${p.name.toLowerCase()}</span><b class="num">${money2(lineTotal(o))}</b></div>
+    <button class="btn btn-primary btn-block btn-lg" data-act="addcart">${S.editIx!=null?"Update cart":"Add to cart"}</button>
+  </div>`:`
+  <label class="drop" id="drop" for="file">
+    <span class="btn btn-blue">Choose file…</span>
+    <span class="muted small">or drag and drop</span>
+    <input id="file" type="file" accept="image/*,.pdf,.ai,.eps,.svg" hidden>
+  </label>
+  ${S.designOpen?`
+  <div class="panel">
+    <label class="f" for="brief">Describe your sign and a designer will make it for free
+      <textarea class="t" id="brief" rows="3" placeholder="Example: Open House, Saturday 1–4pm, 412 Maple Ave, our logo in the corner">${esc(S.brief)}</textarea></label>
+    <span class="err" id="briefErr" hidden>Tell us what the sign should say.</span>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="senddesign">Add to cart with design request</button><button class="btn btn-ghost" data-act="toggledesign">Cancel</button></div>
+  </div>`:`<button class="alt-opt" data-act="toggledesign">✎ No design? Describe it and we'll design it free</button>`}
+  <p class="skip">or, <button class="link" data-act="skip">skip this step &amp; email artwork later.</button></p>`}
+  <p class="small muted" style="text-align:center"><button class="link" data-go="product" data-p="${S.pid}">← Back to options</button></p>
+</div>`;};
+
+V.cart=()=>{
+  if(!S.cart.length) return `<div class="wrap" style="padding-block:60px;display:grid;gap:14px;justify-items:start"><h1>Your cart is empty</h1><p class="muted">Pick a sign to get a live price in seconds.</p><button class="btn btn-blue" data-go="home" data-scroll="products">Browse signs</button></div>`;
+  const sub=subtotal(),d=discountFor(sub);
+  const inCart=new Set(S.cart.map(i=>i.pid));
+  return `
+<div class="wrap">
+  ${stepper(2)}
+  <h1 style="margin-block:8px 18px">Cart</h1>
+  <div class="cart">
+    <div class="ctable" role="table" aria-label="Cart items">
+      <div class="crow chead" role="row"><span role="columnheader">Description</span><span role="columnheader">Quantity</span><span role="columnheader">Total</span><span></span></div>
+      ${S.cart.map((i,ix)=>{const p=PRODUCTS[i.pid];return `
+      <div class="crow" role="row">
+        <div class="cdesc"><span class="mini">${mock(i,i.art,60,60)}</span><div style="min-width:0;display:grid;gap:2px"><button class="link" data-go="product" data-p="${i.pid}">${p.name}</button><span class="small">${esc(desc(i))}${i.addon?" · H-stakes":""} <button class="link" data-act="edit" data-ix="${ix}">Edit</button></span><span class="small muted trunc">${i.artName?esc(i.artName):"Artwork: email after checkout"}</span></div></div>
+        <input class="t qty-in num" type="number" min="1" max="10000" id="cq-${ix}" data-ix="${ix}" value="${i.qty}" aria-label="Quantity for ${p.name}">
+        <b class="num" id="ct-${ix}">${money(lineTotal(i))}</b>
+        <button class="rm" data-act="remove" data-ix="${ix}" aria-label="Remove ${p.name}">×</button>
+      </div>`}).join("")}
+    </div>
+    <aside class="csum">
+      <div class="csum-box">
+        <b class="num" style="font-size:1.5rem" id="csub">Subtotal: ${money(sub-d)}</b>
+        <span class="muted">${d?`$10 first-order discount applied · `:""}Free shipping</span>
+        <button class="btn btn-primary btn-block btn-lg" data-go="checkout">Checkout 🔒</button>
+      </div>
+      <button class="link" data-act="share">Share your cart</button>
+    </aside>
+  </div>
+  <section class="block"><div class="sec-head"><h2>Add more to your order</h2></div>
+    <div class="xsell">${ORDER.filter(p=>!inCart.has(p)).map(pid=>`<button class="xs" data-go="product" data-p="${pid}"><span class="thumb">${mock({pid,size:Math.min(1,PRODUCTS[pid].sizes.length-1)},null,140,90)}</span>${PRODUCTS[pid].name}</button>`).join("")}</div>
+  </section>
+</div>`;};
+
+V.checkout=()=>{
+  if(!S.cart.length){S.view="cart";return V.cart()}
+  const sub=subtotal(),d=discountFor(sub),tot=sub-d;
+  return `
+<div class="wrap">
+  ${stepper(2)}
+  <div class="co">
+    <form id="coForm" novalidate>
+      <div class="panel">
+        <h2>Checkout</h2>
+        <div class="express"><button type="button" data-act="express">Pay with Apple Pay</button><button type="button" data-act="express">Pay with PayPal</button></div>
+        <div class="or">or enter details</div>
+        <label class="f" for="email">Email <span class="muted" style="font-weight:400">(we send your proof link here)</span><input class="t" id="email" type="email" autocomplete="email" required></label>
+        <label class="f" for="phone">Mobile <span class="muted" style="font-weight:400">(optional, for a text when your proof is ready)</span><input class="t" id="phone" type="tel" autocomplete="tel"></label>
+      </div>
+      <div class="panel">
+        <h3>Shipping address</h3>
+        <label class="f" for="name">Full name<input class="t" id="name" autocomplete="name" required></label>
+        <label class="f" for="addr">Street address<input class="t" id="addr" autocomplete="street-address" required></label>
+        <div class="grid3"><label class="f" for="city">City<input class="t" id="city" autocomplete="address-level2" required></label><label class="f" for="state">State<input class="t" id="state" autocomplete="address-level1" required></label><label class="f" for="zip">ZIP<input class="t" id="zip" inputmode="numeric" autocomplete="postal-code" required></label></div>
+      </div>
+      <div class="panel">
+        <h3>Payment</h3>
+        <div class="callout ok">You won't be charged until you approve your proof.</div>
+        <label class="f" for="card">Card number<input class="t" id="card" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" required></label>
+        <div class="grid2"><label class="f" for="exp">Expiry<input class="t" id="exp" autocomplete="cc-exp" placeholder="MM / YY" required></label><label class="f" for="cvc">CVC<input class="t" id="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" required></label></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Place order · ${money2(tot)}</button>
+        <p class="small muted">Demo only: no real payment is taken. <button type="button" class="link" data-act="fill">Fill with example details</button></p>
+      </div>
+    </form>
+    <aside class="side panel">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Order summary</h3><button class="link small" data-go="cart">Edit cart</button></div>
+      <div>${S.cart.map(i=>`
+        <div class="line-item">
+          <div class="mini">${mock(i,i.art,60,60)}</div>
+          <div style="display:grid;gap:4px;min-width:0"><b>${PRODUCTS[i.pid].name}</b><span class="small muted">${esc(desc(i))} · Qty ${i.qty.toLocaleString()}${i.addon?" · H-stakes":""}</span><span class="small muted trunc">${i.artName?esc(i.artName):"Artwork: email after checkout"}</span></div>
+          <b class="num">${money2(lineTotal(i))}</b>
+        </div>`).join("")}</div>
+      <div class="totals num"><div><span>Subtotal</span><span>${money2(sub)}</span></div>${d?`<div><span>First-order discount</span><span class="free">−${money2(d)}</span></div>`:""}<div><span>Shipping</span><span class="free">Free</span></div><div><span>Proof &amp; revisions</span><span class="free">Free</span></div><div class="grand"><span>Total</span><span>${money2(tot)}</span></div></div>
+      <div class="ship-line"><span class="dot"></span>Arrives by ${bizDays(6)} with same-day proof approval</div>
+    </aside>
+  </div>
+</div>`;};
+
+V.confirm=()=>{
+  const o=S.order;
+  return `
+<div class="wrap" style="padding-block:24px 48px">
+  <div class="two" style="padding:0">
+    <div class="panel">
+      <span class="pill ok" style="justify-self:start">Order placed</span>
+      <h1>Thanks, ${esc(o.first)}. We're making your proof.</h1>
+      <p class="muted">Order <b class="num">#${o.id}</b>. We'll email <b>${esc(o.email)}</b>${o.phone?" and text you":""} when your proof is ready, usually within 4 hours.</p>
+      <ol class="timeline">
+        <li class="is-done"><span class="b">✓</span><div><b>Order placed</b><p class="small muted">Card saved, not charged.</p></div></li>
+        <li class="is-now"><span class="b">2</span><div><b>Proof in progress</b><p class="small muted">A designer checks size, bleed and color.</p></div></li>
+        <li><span class="b">3</span><div><b>You approve the proof</b><p class="small muted">Ask for changes as many times as you like. Your card is charged here.</p></div></li>
+        <li><span class="b">4</span><div><b>Printed in 4 business days</b><p class="small muted">Then shipped free with tracking.</p></div></li>
+        <li><span class="b">5</span><div><b>Delivered by ${o.eta}</b><p class="small muted">If you approve today.</p></div></li>
+      </ol>
+      <button class="btn btn-primary" data-act="openproof" style="justify-self:start">Your proof is ready · Review it</button>
+      <p class="small muted">Demo shortcut: in real life this link arrives by email a few hours later.</p>
+    </div>
+    <div class="panel"><h3>What you ordered</h3>${o.items.map(i=>`<div class="line-item"><div class="mini">${mock(i,i.art,60,60)}</div><div><b>${PRODUCTS[i.pid].name}</b><br><span class="small muted">${esc(desc(i))} · Qty ${i.qty.toLocaleString()}</span></div><b class="num">${money2(lineTotal(i))}</b></div>`).join("")}
+      ${o.discount?`<div class="totals num"><div><span>First-order discount</span><span class="free">−${money2(o.discount)}</span></div></div>`:""}</div>
+  </div>
+</div>`;};
+
+V.proof=()=>{
+  const o=S.order,i=o.items[0],p=PRODUCTS[i.pid],P=S.proof,[label,w,h]=sizeOf(i),shape=shapeOf(i);
+  const approved=P.status==="approved",revising=P.status==="revising";
+  return `
+<div class="wrap">
+  ${stepper(approved?4:3)}
+  <div class="two">
+    <div class="proofsheet">
+      <div class="proof-head"><div><span class="eyebrow">Order #${o.id} · Proof v${P.version}</span><h2>${p.name}, ${esc(desc(i))}</h2></div><span class="pill ${approved?"ok":""}">${approved?"Approved":revising?"Revision in progress":"Waiting on you"}</span></div>
+      <div class="stage-canvas"><div class="dim"><span class="v">${h} in</span>${mock(i,i.art,340,280,shape!=="rect")}<span class="h">${w} in</span></div></div>
+      <ul class="checks">
+        <li>Printed size ${esc(label)}, ${p.material}</li>
+        <li>Bleed added: 0.125 in on all sides</li>${shape!=="rect"?`<li>Cut path: ${esc(SHAPES[shape].label.toLowerCase())} (pink dashed line), 1/8 in white border</li>`:""}
+        <li>Resolution checked: prints sharp at this size</li>
+        <li>Quantity ${i.qty.toLocaleString()}${i.addon?", H-stakes included":""}</li>
+      </ul>
+      ${o.items.length>1?`<p class="small muted">Proofs for the other ${o.items.length-1} item(s) in this order arrive separately.</p>`:""}
+    </div>
+    <div class="panel">
+      ${approved?`
+        <h2>Approved. We're printing it.</h2>
+        <p class="muted">Your card was charged ${money2(o.total)}. Ships free and arrives by <b>${o.eta}</b>. Tracking comes by email.</p>
+        <div class="callout ok">Need more later? Reorder this exact sign in one click from your account.</div>
+        <button class="btn btn-ghost" data-go="home">Back to shop</button>`
+      :revising?`
+        <h2>Got it. Version ${P.version+1} is on the way.</h2>
+        <p class="muted">A designer is working on your change. New proofs usually take about 2 hours. Your delivery date holds if you approve by 5pm ET tomorrow.</p>
+        <button class="btn btn-primary" data-act="newversion">Demo: show proof v${P.version+1}</button>`
+      :`
+        <h2>Review your proof</h2>
+        <p class="muted">Check spelling, phone numbers and dates. What you approve is exactly what we print.</p>
+        ${P.confirming?`
+          <div class="confirm-box"><b>Approve and start printing?</b><p class="small muted">We'll charge ${money2(o.total)} and start production. Changes aren't possible after this.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="approve">Yes, print it</button><button class="btn btn-ghost" data-act="cancelconfirm">Go back</button></div></div>`
+        :P.changing?`
+          <label class="f" for="change">What should we change?<textarea class="t" id="change" rows="4" placeholder="Example: make the address text bigger and move it up"></textarea></label>
+          <span class="err" id="changeErr" hidden>Describe the change so our designer knows what to do.</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" data-act="sendchange">Send change request</button><button class="btn btn-ghost" data-act="cancelchange">Cancel</button></div>`
+        :`
+          <button class="btn btn-primary btn-block btn-lg" data-act="confirmapprove">Approve proof</button>
+          <button class="btn btn-ghost btn-block" data-act="requestchange">Request changes</button>
+          <p class="small muted">Changes are free and unlimited. Cancel for free any time before you approve.</p>`}`}
+      ${P.history.length?`<div class="history"><span class="eyebrow">History</span>${P.history.map(h=>`<div>${esc(h)}</div>`).join("")}</div>`:""}
+    </div>
+  </div>
+</div>`;};
+
+/* ---------- render + routing ---------- */
+function stay(focusId){const y=window.scrollY;render();window.scrollTo(0,y);if(focusId){const el=document.getElementById(focusId);if(el)el.focus({preventScroll:true})}}
+function render(scrollTo){
+  $("#app").innerHTML=`<div class="view">${V[S.view]()}</div>`;
+  $("#cartCount").textContent=S.cart.length;
+  if(scrollTo){const el=document.getElementById(scrollTo);if(el){el.scrollIntoView({behavior:"smooth"});return}}
+  window.scrollTo(0,0);
+}
+function resetItem(pid){Object.assign(S,{pid,shape:(PRODUCTS[pid].shapes||["rect"])[0],size:Math.min(1,PRODUCTS[pid].sizes.length-1),addon:false,art:null,artName:"",notes:"",brief:"",designOpen:false,sizeHelp:false,editIx:null})}
+function go(view,opts={}){
+  if(view==="product"&&opts.p&&(opts.p!==S.pid||S.editIx!=null))resetItem(opts.p);
+  if(opts.qty){S.qty=+opts.qty;S.qtyCustom=false}
+  if((view==="proof"||view==="confirm")&&!S.order)view="home";
+  S.view=view;render(opts.scroll);
+}
+function addToCart(extra={}){
+  const n=$("#notes");if(n)S.notes=n.value;
+  const item={...cur(),art:S.art,artName:S.artName,notes:S.notes,...extra};
+  if(S.editIx!=null&&S.cart[S.editIx]){S.cart[S.editIx]=item;S.editIx=null;toast("Cart updated")}else{S.cart.push(item);toast("Added to cart")}
+  saveCart();S.view="cart";render();
+}
+
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");
+  if(g){e.preventDefault();go(g.dataset.go,{p:g.dataset.p,scroll:g.dataset.scroll,qty:g.dataset.qty});return}
+  const a=e.target.closest("[data-act]");if(!a)return;
+  const act=a.dataset.act,ix=+a.dataset.ix;
+  switch(act){
+  case "continue": go("upload");break;
+  case "sample": S.qty=1;S.qtyCustom=false;stay("qty-1");toast("Quantity set to 1 so you can test the quality");break;
+  case "sizehelp": S.sizeHelp=!S.sizeHelp;stay();break;
+  case "toggledesign": S.designOpen=!S.designOpen;stay(S.designOpen?"brief":null);break;
+  case "senddesign": {const t=$("#brief").value.trim();if(!t){$("#briefErr").hidden=false;$("#brief").focus();return}S.brief=t;S.art=null;S.artName="Design request: "+(t.length>40?t.slice(0,40)+"…":t);addToCart({notes:t});break}
+  case "skip": S.art=null;S.artName="";addToCart();break;
+  case "addcart": addToCart();break;
+  case "remove": S.cart.splice(ix,1);saveCart();stay();toast("Removed from cart");break;
+  case "edit": {const i=S.cart[ix];Object.assign(S,{pid:i.pid,shape:shapeOf(i),size:i.size,cw:i.cw??S.cw,ch:i.ch??S.ch,qty:i.qty,qtyCustom:!QTY.includes(i.qty),addon:i.addon,art:i.art,artName:i.artName,notes:i.notes||"",editIx:ix});S.view="product";render();break}
+  case "share": {const txt="My Postline cart:\n"+S.cart.map(i=>`${i.qty} × ${PRODUCTS[i.pid].name}, ${desc(i)}: ${money2(lineTotal(i))}`).join("\n");
+    try{navigator.clipboard.writeText(txt).then(()=>toast("Cart summary copied"),()=>toast("Copy blocked by your browser"))}catch(err){toast("Copy blocked by your browser")}break}
+  case "closepromo": S.promo="closed";try{localStorage.setItem("postline-promo","1")}catch(err){}stay();break;
+  case "claim": {const v=$("#promoEmail").value.trim();if(!/^\S+@\S+\.\S+$/.test(v)){$("#promoErr").hidden=false;$("#promoEmail").focus();return}S.discount=10;S.promo="closed";try{localStorage.setItem("postline-promo","1")}catch(err){}stay();toast("$10 off applied to orders of $30+");break}
+  case "express": toast("Demo: express pay would open here. Use the card form below.");break;
+  case "fill": {const v={email:"sam@mapleteam.example",phone:"555-0142",name:"Sam Rivera",addr:"412 Maple Ave",city:"Columbus",state:"OH",zip:"43215",card:"4242 4242 4242 4242",exp:"12 / 28",cvc:"123"};for(const k in v){const el=document.getElementById(k);if(el){el.value=v[k];el.classList.remove("bad")}}document.querySelectorAll(".co .err").forEach(x=>x.remove());break}
+  case "openproof": S.proof={status:"ready",version:1,history:["v1 sent by Jordan (prepress): added bleed, centered artwork."],confirming:false,changing:false};go("proof");break;
+  case "confirmapprove": S.proof.confirming=true;stay();break;
+  case "cancelconfirm": S.proof.confirming=false;stay();break;
+  case "approve": S.proof.status="approved";S.proof.confirming=false;S.proof.history.push(`You approved v${S.proof.version}. Production started.`);stay();toast("Proof approved");break;
+  case "requestchange": S.proof.changing=true;stay("change");break;
+  case "cancelchange": S.proof.changing=false;stay();break;
+  case "sendchange": {const t=$("#change").value.trim();if(!t){$("#changeErr").hidden=false;$("#change").focus();return}S.proof.history.push(`You asked: "${t}"`);S.proof.status="revising";S.proof.changing=false;stay();toast("Change request sent");break}
+  case "newversion": S.proof.version++;S.proof.status="ready";S.proof.history.push(`v${S.proof.version} sent by Jordan (prepress): change applied.`);stay();break;
+  }
+});
+
+const clampInt=(v,lo,hi,d)=>{v=parseInt(v,10);return isNaN(v)?d:Math.min(hi,Math.max(lo,v))};
+function liveTotal(){const p=PRODUCTS[S.pid],o=cur(),u=unit(o)+(S.addon&&p.addon?p.addon.price:0);$("#ptotal").textContent=money(u*S.qty);$("#punit").textContent=money2(u)+" / sign";
+  QTY.forEach(q=>{const el=document.getElementById("qp-"+q);if(el)el.textContent=money(lineTotal({...o,qty:q,addon:false}))});
+  $("#stage").innerHTML=mock(o,S.art,420,320,shapeOf(o)!=="rect");$("#slabel").textContent=desc(o)}
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.name==="shape"){S.shape=t.value;stay("shape-"+S.shape)}
+  else if(t.name==="size"){S.size=+t.value;stay("size-"+S.size)}
+  else if(t.name==="qty"){if(t.value==="custom"){S.qtyCustom=true;stay("cqty")}else{S.qtyCustom=false;S.qty=+t.value;stay("qty-"+S.qty)}}
+  else if(t.id==="addon"){S.addon=t.checked;stay("addon")}
+  else if(t.id==="cw"||t.id==="ch"){S[t.id]=clampInt(t.value,4,120,S[t.id]);t.value=S[t.id];liveTotal()}
+  else if(t.id==="cqty"){S.qty=clampInt(t.value,1,10000,S.qty);t.value=S.qty;liveTotal()}
+  else if(t.classList.contains("qty-in")){const ix=+t.dataset.ix,i=S.cart[ix];i.qty=clampInt(t.value,1,10000,i.qty);t.value=i.qty;saveCart();const sub=subtotal();$("#ct-"+ix).textContent=money(lineTotal(i));$("#csub").textContent="Subtotal: "+money(sub-discountFor(sub))}
+  else if(t.id==="sort"){S.sort=t.value.startsWith("Price")?"price":"";stay("sort")}
+  else if(t.id==="file"&&t.files[0])readFile(t.files[0]);
+});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="notes")S.notes=t.value;
+  else if(t.id==="brief")S.brief=t.value;
+  else if(t.id==="cqty"){const v=parseInt(t.value,10);if(v>=1&&v<=10000){S.qty=v;liveTotal()}}
+  else if(t.id==="cw"||t.id==="ch"){const v=parseInt(t.value,10);if(v>=4&&v<=120){S[t.id]=v;liveTotal()}}
+});
+
+function readFile(f){
+  const n=$("#notes");if(n)S.notes=n.value;
+  S.artName=f.name;S.art=null;
+  if(/^image\//.test(f.type)&&f.size<15e6){const r=new FileReader();r.onload=()=>{S.art=r.result;stay()};r.readAsDataURL(f)}else stay();
+}
+document.addEventListener("dragover",e=>{const d=e.target.closest&&e.target.closest("#drop");if(d){e.preventDefault();d.classList.add("over")}});
+document.addEventListener("dragleave",e=>{const d=e.target.closest&&e.target.closest("#drop");if(d)d.classList.remove("over")});
+document.addEventListener("drop",e=>{const d=e.target.closest&&e.target.closest("#drop");if(d){e.preventDefault();d.classList.remove("over");if(e.dataTransfer.files[0])readFile(e.dataTransfer.files[0])}});
+
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="coForm")return;e.preventDefault();
+  const f=e.target;f.querySelectorAll(".err").forEach(x=>x.remove());let first=null;
+  const msgs={email:"Enter an email so we can send your proof.",name:"Enter the name for the shipping label.",addr:"Enter a street address.",city:"Enter a city.",state:"Enter a state.",zip:"Enter a 5-digit ZIP.",card:"Enter a card number.",exp:"Enter the expiry date.",cvc:"Enter the 3-digit code."};
+  for(const id in msgs){const el=document.getElementById(id);let ok=el.value.trim()!=="";
+    if(id==="email")ok=/^\S+@\S+\.\S+$/.test(el.value.trim());
+    if(id==="zip")ok=/^\d{5}$/.test(el.value.trim());
+    el.classList.toggle("bad",!ok);
+    if(!ok){const s=document.createElement("span");s.className="err";s.textContent=msgs[id];el.after(s);first=first||el}}
+  if(first){first.focus();return}
+  const sub=subtotal(),d=discountFor(sub);
+  S.order={id:"PL-"+(48000+Math.floor(Math.random()*999)),first:$("#name").value.trim().split(" ")[0],email:$("#email").value.trim(),phone:$("#phone").value.trim(),items:S.cart.slice(),discount:d,total:sub-d,eta:bizDays(6)};
+  if(d)S.discount=0;
+  S.cart=[];saveCart();go("confirm");
+});
+
+render();
+})();
+</script>
